@@ -1,0 +1,10 @@
+# Godot 4+ specific ignores
+.godot/
+/android/
+
+# Jetbrains
+.idea/
+
+# Massive Libaries
+/addons/massive-godot-integration/massive-ecs/
+/addons/massive-godot-integration/massive-netcode/
