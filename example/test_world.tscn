@@ -22,7 +22,7 @@ fog_depth_end = 20.0
 [sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_uhqqe"]
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_uhqqe"]
-size = Vector2(100, 100)
+size = Vector2(20, 20)
 
 [node name="TestWorld" type="Node3D" unique_id=100398020]
 script = ExtResource("1_eruhi")
@@ -42,6 +42,7 @@ directional_shadow_max_distance = 20.0
 [node name="Ground" type="StaticBody3D" parent="." unique_id=61614955]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Ground" unique_id=1016131674]
+visible = false
 shape = SubResource("WorldBoundaryShape3D_uhqqe")
 
 [node name="GroundMesh" type="MeshInstance3D" parent="Ground" unique_id=294845216]
@@ -49,6 +50,7 @@ material_override = ExtResource("1_j4mji")
 mesh = SubResource("PlaneMesh_uhqqe")
 
 [node name="CSGCombiner3D" type="CSGCombiner3D" parent="." unique_id=257049556]
+visible = false
 material_override = ExtResource("1_j4mji")
 use_collision = true
 

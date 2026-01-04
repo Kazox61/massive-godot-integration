@@ -2,6 +2,7 @@
 using Godot;
 using Massive;
 using massivegodotintegration.addons.massive_godot_integration.Components;
+using Mathematics.Fixed;
 
 namespace massivegodotintegration.addons.massive_godot_integration;
 
@@ -64,7 +65,7 @@ public class NodeSynchronizer {
 
 			if (entity.Has<Transform>() && node is Node3D node3D) {
 				var transform = entity.Get<Transform>();
-				node3D.Position = new Vector3(transform.PositionX, transform.PositionY, transform.PositionZ);
+				node3D.Position = new Vector3(transform.Position.X.ToFloat(), transform.Position.Y.ToFloat(), transform.Position.Z.ToFloat());
 			}
 		});
 

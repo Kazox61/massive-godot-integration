@@ -1,7 +1,8 @@
-﻿namespace massivegodotintegration.addons.massive_godot_integration.Components;
+﻿using Mathematics.Fixed;
+
+namespace massivegodotintegration.addons.massive_godot_integration.Components;
 
 public struct Transform {
-	public float PositionX;
-	public float PositionY;
-	public float PositionZ;
+	public FVector3 Position;
+	public FQuaternion Rotation;
 }

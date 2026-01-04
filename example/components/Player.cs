@@ -1,4 +1,4 @@
-﻿namespace massivegodotintegration.Example.Components;
+﻿namespace massivegodotintegration.example.components;
 
 public struct Player {
 	public int InputChannel;

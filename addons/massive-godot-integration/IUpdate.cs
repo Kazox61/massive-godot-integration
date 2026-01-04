@@ -1,6 +1,6 @@
 ﻿using Massive;
 
-namespace massivegodotintegration.Example;
+namespace massivegodotintegration.addons.massive_godot_integration;
 
 public interface IUpdate : ISystemMethod<IUpdate> {
 	void Update();
