@@ -28,6 +28,7 @@ public partial class TestWorld : Node3D {
 			.New<PhysicsSolveSystem>()
 			.New<MovementSystem>()
 			.New<CameraFollowSystem>()
+			.New<PlayerAttackSystem>()
 			.Build(Session.World)
 			.Inject(Session);
 
@@ -54,7 +55,8 @@ public partial class TestWorld : Node3D {
 			Velocity = FVector3.Zero,
 			InverseMass = FP.One,
 			Restitution = FP.Zero,
-			Friction = 0.5f.ToFP()
+			Friction = 0.5f.ToFP(),
+			UseGravity = true
 		});
 		player.Set(new BoxCollider {
 			HalfExtents = new FVector3(0.5f.ToFP(), 0.8f.ToFP(), 0.5f.ToFP())

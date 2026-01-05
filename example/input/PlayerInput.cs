@@ -5,4 +5,5 @@ public struct PlayerInput {
 	public float DirectionY;
 	public bool Kill;
 	public bool Jump;
+	public bool Attack;
 }

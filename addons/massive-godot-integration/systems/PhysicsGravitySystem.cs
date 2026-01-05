@@ -10,11 +10,11 @@ public class PhysicsGravitySystem : NetSystem, IUpdate {
 
 	public void Update() {
 		World.ForEach((ref RigidBody body) => {
-			if (body.InverseMass == FP.Zero) {
+			if (body.InverseMass == FP.Zero || !body.UseGravity) {
 				return;
 			}
 
-			body.Velocity += Gravity * FP.One / Session.Config.TickRate.ToFP();
+			body.Velocity += Gravity * (FP.One / Session.Config.TickRate.ToFP());
 		});
 	}
 }

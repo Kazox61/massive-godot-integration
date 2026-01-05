@@ -1,0 +1,21 @@
+[gd_scene format=3 uid="uid://bijsxjhjq26gh"]
+
+[ext_resource type="Script" uid="uid://cxolp8jlbjgli" path="res://addons/massive-godot-integration/synchronizer/EntityView.cs" id="1_itdjw"]
+[ext_resource type="Script" uid="uid://6bfqv5lyofeb" path="res://addons/massive-godot-integration/synchronizer/TransformViewBehavior.cs" id="2_wahqi"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_31qdj"]
+radius = 0.2
+height = 0.4
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_31qdj"]
+albedo_color = Color(0.29803923, 0.5254902, 1, 1)
+
+[node name="Projectile" type="MeshInstance3D" unique_id=1331642330 node_paths=PackedStringArray("_viewBehaviors")]
+mesh = SubResource("SphereMesh_31qdj")
+surface_material_override/0 = SubResource("StandardMaterial3D_31qdj")
+script = ExtResource("1_itdjw")
+_viewBehaviors = [NodePath("TransformViewBehavior")]
+
+[node name="TransformViewBehavior" type="Node" parent="." unique_id=823922719 node_paths=PackedStringArray("_targetNode")]
+script = ExtResource("2_wahqi")
+_targetNode = NodePath("..")

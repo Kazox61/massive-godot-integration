@@ -11,4 +11,6 @@ public struct RigidBody {
 	
 	public FP Restitution;
 	public FP Friction;
+
+	public bool UseGravity;
 }
