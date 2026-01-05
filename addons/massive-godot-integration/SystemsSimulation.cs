@@ -1,7 +1,6 @@
 ﻿using Massive.Netcode;
-using massivegodotintegration.addons.massive_godot_integration;
 
-namespace massivegodotintegration.example;
+namespace massivegodotintegration.addons.massive_godot_integration;
 
 public class SystemsSimulation : ISimulation {
 	public Massive.Systems Systems { get; }

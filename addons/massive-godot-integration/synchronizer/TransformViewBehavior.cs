@@ -5,6 +5,7 @@ using Mathematics.Fixed;
 
 namespace massivegodotintegration.addons.massive_godot_integration.synchronizer;
 
+[GlobalClass]
 public partial class TransformViewBehavior : ViewBehavior {
 	[Export] private Node3D _targetNode;
 

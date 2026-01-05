@@ -1,6 +1,6 @@
 ﻿using Massive.Netcode;
 
-namespace massivegodotintegration.example;
+namespace massivegodotintegration.addons.massive_godot_integration;
 
 public class SimulationTickTracker : ISimulation {
 	public int TicksAmount { get; private set; }

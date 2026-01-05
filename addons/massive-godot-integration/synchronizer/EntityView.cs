@@ -4,6 +4,7 @@ using Massive;
 
 namespace massivegodotintegration.addons.massive_godot_integration.synchronizer;
 
+[GlobalClass]
 public partial class EntityView : Node3D {
 	[Export] private Array<ViewBehavior> _viewBehaviors = [];
 	[Export] private Array<ViewComponent> _viewComponents = [];
