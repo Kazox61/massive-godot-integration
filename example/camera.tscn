@@ -1,0 +1,13 @@
+[gd_scene format=3 uid="uid://bxsufad02k7ld"]
+
+[ext_resource type="Script" uid="uid://6bfqv5lyofeb" path="res://addons/massive-godot-integration/synchronizer/TransformViewBehavior.cs" id="1_ey8qp"]
+[ext_resource type="Script" uid="uid://cxolp8jlbjgli" path="res://addons/massive-godot-integration/synchronizer/EntityView.cs" id="1_pw1oj"]
+
+[node name="Camera3D" type="Camera3D" unique_id=1660239896 node_paths=PackedStringArray("_viewBehaviors")]
+current = true
+script = ExtResource("1_pw1oj")
+_viewBehaviors = [NodePath("TransformViewBehavior")]
+
+[node name="TransformViewBehavior" type="Node" parent="." unique_id=1142233983 node_paths=PackedStringArray("_targetNode")]
+script = ExtResource("1_ey8qp")
+_targetNode = NodePath("..")

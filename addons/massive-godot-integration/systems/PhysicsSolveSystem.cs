@@ -33,25 +33,47 @@ public class PhysicsSolveSystem : NetSystem, IUpdate {
 			tA.Position -= correction * invMassA;
 			tB.Position += correction * invMassB;
 
-			var rv = bB.Velocity - bA.Velocity;
-			var velAlongNormal = FVector3.Dot(rv, normal);
+			var groundDot = 0.7f.ToFP();
 
-			if (velAlongNormal > FP.Zero) {
-				entity.Destroy();
-				return;
+			if (normal.Y > groundDot && bA.InverseMass > FP.Zero) {
+				if (bA.Velocity.Y < FP.Zero) {
+					bA.Velocity = new FVector3(
+						bA.Velocity.X,
+						FP.Zero,
+						bA.Velocity.Z
+					);
+				}
 			}
 
-			var restitution = FMath.Min(bA.Restitution, bB.Restitution);
+			if (-normal.Y > groundDot && bB.InverseMass > FP.Zero) {
+				if (bB.Velocity.Y < FP.Zero) {
+					bB.Velocity = new FVector3(
+						bB.Velocity.X,
+						FP.Zero,
+						bB.Velocity.Z
+					);
+				}
+			}
 
-			var j = -(FP.One + restitution) * velAlongNormal;
-			j /= invMassA + invMassB;
+			var rv = bB.Velocity - bA.Velocity;
+				var velAlongNormal = FVector3.Dot(rv, normal);
 
-			var impulse = j * normal;
+				if (velAlongNormal > FP.Zero) {
+					entity.Destroy();
+					return;
+				}
 
-			bA.Velocity -= impulse * invMassA;
-			bB.Velocity += impulse * invMassB;
-			
-			entity.Destroy();
-		});
+				var restitution = FMath.Min(bA.Restitution, bB.Restitution);
+
+				var j = -(FP.One + restitution) * velAlongNormal;
+				j /= invMassA + invMassB;
+
+				var impulse = j * normal;
+
+				bA.Velocity -= impulse * invMassA;
+				bB.Velocity += impulse * invMassB;
+
+				entity.Destroy();
+			});
+		}
 	}
-}

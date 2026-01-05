@@ -1,16 +1,32 @@
 [gd_scene format=3 uid="uid://co404hlcu1jdg"]
 
+[ext_resource type="Script" uid="uid://cxolp8jlbjgli" path="res://addons/massive-godot-integration/synchronizer/EntityView.cs" id="1_rxg4x"]
+[ext_resource type="PackedScene" uid="uid://dmyrflud401tg" path="res://example/assets/godot_plush/godot_plush_skin.tscn" id="1_vjlsr"]
+[ext_resource type="Script" uid="uid://6bfqv5lyofeb" path="res://addons/massive-godot-integration/synchronizer/TransformViewBehavior.cs" id="3_7dqni"]
+[ext_resource type="Script" uid="uid://c5bpbu8y2cexp" path="res://example/PlayerViewBehavior.cs" id="4_43feq"]
+
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_1yxrk"]
 height = 1.6
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1yxrk"]
 albedo_color = Color(0.39215687, 0.32941177, 1, 1)
 
-[node name="Player" type="Node3D" unique_id=324689971]
+[node name="Player" type="Node3D" unique_id=324689971 node_paths=PackedStringArray("_viewBehaviors")]
+script = ExtResource("1_rxg4x")
+_viewBehaviors = [NodePath("TransformViewBehavior"), NodePath("PlayerViewBehavior")]
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1793813596]
+visible = false
 mesh = SubResource("CapsuleMesh_1yxrk")
 surface_material_override/0 = SubResource("StandardMaterial3D_1yxrk")
 
-[node name="Camera3D" type="Camera3D" parent="." unique_id=1277272231]
-transform = Transform3D(1, 0, 0, 0, 0.8660254, 0.5, 0, -0.5, 0.8660254, 0, 6, 8)
+[node name="GodotPlushSkin" parent="." unique_id=1916972161 instance=ExtResource("1_vjlsr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.75, 0)
+
+[node name="TransformViewBehavior" type="Node" parent="." unique_id=2066113465 node_paths=PackedStringArray("_targetNode")]
+script = ExtResource("3_7dqni")
+_targetNode = NodePath("..")
+
+[node name="PlayerViewBehavior" type="Node" parent="." unique_id=726075329 node_paths=PackedStringArray("_plushSkin")]
+script = ExtResource("4_43feq")
+_plushSkin = NodePath("../GodotPlushSkin")

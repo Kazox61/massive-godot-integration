@@ -1,9 +1,8 @@
-using System;
 using Godot;
 using Massive;
 using Massive.Netcode;
-using massivegodotintegration.addons.massive_godot_integration;
 using massivegodotintegration.addons.massive_godot_integration.Components;
+using massivegodotintegration.addons.massive_godot_integration.synchronizer;
 using massivegodotintegration.addons.massive_godot_integration.systems;
 using massivegodotintegration.example.components;
 using massivegodotintegration.example.systems;
@@ -15,7 +14,7 @@ public partial class TestWorld : Node3D {
 	public Session Session;
 
 	public int TargetTick;
-	public NodeSynchronizer NodeSynchronizer;
+	public EntityViewSynchronizer EntityViewSynchronizer;
 	public readonly SimulationTickTracker TickTracker = new();
 
 	public override void _Ready() {
@@ -28,6 +27,7 @@ public partial class TestWorld : Node3D {
 			.New<PhysicsNarrowPhaseSystem>()
 			.New<PhysicsSolveSystem>()
 			.New<MovementSystem>()
+			.New<CameraFollowSystem>()
 			.Build(Session.World)
 			.Inject(Session);
 
@@ -73,18 +73,26 @@ public partial class TestWorld : Node3D {
 			HalfExtents = new FVector3(0.5f.ToFP(), 1f.ToFP(), 0.5f.ToFP())
 		});
 		
+		var camera = Session.World.CreateEntity(new Camera());
+		camera.Set(new CameraTarget {
+			TargetEntity = player,
+			Offset = new FVector3(FP.Zero, 6.ToFP(), 8.ToFP())
+		});
+		camera.Set(new ViewAsset { PackedScenePath = "res://example/camera.tscn" });
+		camera.Set(new Transform { Rotation = new FVector3(-30.ToFP() * FP.Deg2Rad, FP.Zero, FP.Zero) });
+		
 		Session.World.SaveFrame();
 
-		NodeSynchronizer = new NodeSynchronizer(Session.World);
+		EntityViewSynchronizer = new EntityViewSynchronizer(Session.World);
 	}
 
 	public override void _PhysicsProcess(double delta) {
 		// Randomize Rollback Ticks
-		Session.ChangeTracker.NotifyChange(MathUtils.Max(0, TargetTick - Random.Shared.Next(0, 10)));
+		// Session.ChangeTracker.NotifyChange(MathUtils.Max(0, TargetTick - Random.Shared.Next(0, 10)));
 		TickTracker.Restart();
 		Session.Loop.FastForwardToTick(TargetTick);
 		// GD.Print($"Ticks Processed This Frame: {TickTracker.TicksAmount}");
-		NodeSynchronizer.Update();
+		EntityViewSynchronizer.SynchronizeAll();
 		TargetTick++;
 	}
 }

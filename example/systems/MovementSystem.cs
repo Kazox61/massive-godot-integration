@@ -11,7 +11,7 @@ namespace massivegodotintegration.example.systems;
 
 public class MovementSystem : NetSystem, IUpdate {
 	public void Update() {
-		World.ForEach((Entity entity, ref Player player, ref RigidBody rigidBody) => {
+		World.ForEach((Entity entity, ref Player player, ref RigidBody rigidBody, ref Transform transform) => {
 			var playerInput = Inputs.Get<PlayerInput>(player.InputChannel).LastActual();
 			var moveDir = new FVector3(playerInput.DirectionX.ToFP(), FP.Zero, playerInput.DirectionY.ToFP());
 			if (moveDir != FVector3.Zero) {
@@ -24,6 +24,14 @@ public class MovementSystem : NetSystem, IUpdate {
 				rigidBody.Velocity.Y,
 				moveDir.Z * moveSpeed
 			);
+
+			if (moveDir != FVector3.Zero) {
+				transform.Rotation = new FVector3(
+					FP.Zero,
+					FMath.Atan2(moveDir.X, moveDir.Z),
+					FP.Zero
+				);
+			}
 
 			if (playerInput.Jump) {
 				rigidBody.Velocity += new FVector3(
