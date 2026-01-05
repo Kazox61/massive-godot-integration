@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://dp46pxxey7mmx" path="res://example/TestWorld.cs" id="1_eruhi"]
 [ext_resource type="Material" uid="uid://crh4edqr4kdta" path="res://example/assets/materials/grid_mat.tres" id="1_j4mji"]
+[ext_resource type="PackedScene" uid="uid://523kihkq6fwh" path="res://addons/massive-godot-integration/massive_stats.tscn" id="2_1dbi7"]
 [ext_resource type="Script" uid="uid://ban4dxirsdllu" path="res://example/input/InputCollector.cs" id="2_eruhi"]
 
 [sub_resource type="Environment" id="Environment_6adnx"]
@@ -24,8 +25,11 @@ fog_depth_end = 20.0
 [sub_resource type="PlaneMesh" id="PlaneMesh_uhqqe"]
 size = Vector2(20, 20)
 
-[node name="TestWorld" type="Node3D" unique_id=100398020]
+[node name="TestWorld" type="Node3D" unique_id=100398020 node_paths=PackedStringArray("_massiveStats")]
 script = ExtResource("1_eruhi")
+_massiveStats = NodePath("MassiveStats")
+
+[node name="MassiveStats" parent="." unique_id=1458097406 instance=ExtResource("2_1dbi7")]
 
 [node name="InputCollector" type="Node" parent="." unique_id=789568960 node_paths=PackedStringArray("TestWorld")]
 script = ExtResource("2_eruhi")

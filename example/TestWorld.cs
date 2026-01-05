@@ -1,6 +1,8 @@
+using System;
 using Godot;
 using Massive;
 using Massive.Netcode;
+using massivegodotintegration.addons.massive_godot_integration;
 using massivegodotintegration.addons.massive_godot_integration.components;
 using massivegodotintegration.addons.massive_godot_integration.synchronizer;
 using massivegodotintegration.addons.massive_godot_integration.systems;
@@ -11,6 +13,8 @@ using Mathematics.Fixed;
 namespace massivegodotintegration.example;
 
 public partial class TestWorld : Node3D {
+	[Export] private MassiveStats _massiveStats;
+	
 	public Session Session;
 
 	public int TargetTick;
@@ -19,6 +23,8 @@ public partial class TestWorld : Node3D {
 
 	public override void _Ready() {
 		Session = new Session();
+		
+		_massiveStats.Initialize(Session.World);
 
 		Session.Systems
 			.New<PhysicsGravitySystem>()
@@ -91,7 +97,7 @@ public partial class TestWorld : Node3D {
 
 	public override void _PhysicsProcess(double delta) {
 		// Randomize Rollback Ticks
-		// Session.ChangeTracker.NotifyChange(MathUtils.Max(0, TargetTick - Random.Shared.Next(0, 10)));
+		Session.ChangeTracker.NotifyChange(MathUtils.Max(0, TargetTick - Random.Shared.Next(0, 10)));
 		TickTracker.Restart();
 		Session.Loop.FastForwardToTick(TargetTick);
 		// GD.Print($"Ticks Processed This Frame: {TickTracker.TicksAmount}");
