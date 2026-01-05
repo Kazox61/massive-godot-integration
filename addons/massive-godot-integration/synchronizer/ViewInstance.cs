@@ -1,4 +1,4 @@
-﻿using massivegodotintegration.addons.massive_godot_integration.Components;
+﻿using massivegodotintegration.addons.massive_godot_integration.components;
 
 namespace massivegodotintegration.addons.massive_godot_integration.synchronizer;
 

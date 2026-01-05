@@ -1,7 +1,7 @@
 using Godot;
 using Massive;
 using Massive.Netcode;
-using massivegodotintegration.addons.massive_godot_integration.Components;
+using massivegodotintegration.addons.massive_godot_integration.components;
 using massivegodotintegration.addons.massive_godot_integration.synchronizer;
 using massivegodotintegration.addons.massive_godot_integration.systems;
 using massivegodotintegration.example.components;
@@ -14,7 +14,7 @@ public partial class TestWorld : Node3D {
 	public Session Session;
 
 	public int TargetTick;
-	public EntityViewSynchronizer EntityViewSynchronizer;
+	public GodotEntitySynchronization GodotEntitySynchronization;
 	public readonly SimulationTickTracker TickTracker = new();
 
 	public override void _Ready() {
@@ -76,14 +76,15 @@ public partial class TestWorld : Node3D {
 		var camera = Session.World.CreateEntity(new Camera());
 		camera.Set(new CameraTarget {
 			TargetEntity = player,
-			Offset = new FVector3(FP.Zero, 6.ToFP(), 8.ToFP())
+			Offset = new FVector3(FP.Zero, 8.ToFP(), 8.ToFP())
 		});
 		camera.Set(new ViewAsset { PackedScenePath = "res://example/camera.tscn" });
-		camera.Set(new Transform { Rotation = new FVector3(-30.ToFP() * FP.Deg2Rad, FP.Zero, FP.Zero) });
+		camera.Set(new Transform { Rotation = new FVector3(-45.ToFP() * FP.Deg2Rad, FP.Zero, FP.Zero) });
 		
 		Session.World.SaveFrame();
 
-		EntityViewSynchronizer = new EntityViewSynchronizer(Session.World);
+		GodotEntitySynchronization = new GodotEntitySynchronization(Session.World);
+		GodotEntitySynchronization.SubscribeViews();
 	}
 
 	public override void _PhysicsProcess(double delta) {
@@ -92,7 +93,7 @@ public partial class TestWorld : Node3D {
 		TickTracker.Restart();
 		Session.Loop.FastForwardToTick(TargetTick);
 		// GD.Print($"Ticks Processed This Frame: {TickTracker.TicksAmount}");
-		EntityViewSynchronizer.SynchronizeAll();
+		GodotEntitySynchronization.SynchronizeViews();
 		TargetTick++;
 	}
 }

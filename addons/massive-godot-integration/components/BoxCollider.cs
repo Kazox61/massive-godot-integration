@@ -1,6 +1,6 @@
 ﻿using Mathematics.Fixed;
 
-namespace massivegodotintegration.addons.massive_godot_integration.Components;
+namespace massivegodotintegration.addons.massive_godot_integration.components;
 
 public class BoxCollider : ICollider {
 	public FVector3 HalfExtents;

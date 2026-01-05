@@ -6,12 +6,16 @@ namespace massivegodotintegration.addons.massive_godot_integration.synchronizer;
 
 public partial class EntityView : Node3D {
 	[Export] private Array<ViewBehavior> _viewBehaviors = [];
+	[Export] private Array<ViewComponent> _viewComponents = [];
 	
 	public World World { get; protected set; }
 	public Entity Entity { get; protected set; }
 	
 	public void Register(World world, Entity  viewEntity) {
 		viewEntity.Set(this);
+		foreach (var viewComponent in _viewComponents) {
+			viewComponent.Register(world, viewEntity);
+		}
 	}
 	
 	public void AssignEntity(World world, Entity entity) {

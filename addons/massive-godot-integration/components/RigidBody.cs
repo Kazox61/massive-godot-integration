@@ -1,6 +1,6 @@
 ﻿using Mathematics.Fixed;
 
-namespace massivegodotintegration.addons.massive_godot_integration.Components;
+namespace massivegodotintegration.addons.massive_godot_integration.components;
 
 public struct RigidBody {
 	public FVector3 Velocity;

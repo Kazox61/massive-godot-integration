@@ -1,6 +1,6 @@
 ﻿using Massive;
 using Massive.Netcode;
-using massivegodotintegration.addons.massive_godot_integration.Components;
+using massivegodotintegration.addons.massive_godot_integration.components;
 using Mathematics.Fixed;
 
 namespace massivegodotintegration.addons.massive_godot_integration.systems;

@@ -1,6 +1,6 @@
 ﻿using Godot;
 using Massive;
-using massivegodotintegration.addons.massive_godot_integration.Components;
+using massivegodotintegration.addons.massive_godot_integration.components;
 using massivegodotintegration.addons.massive_godot_integration.synchronizer;
 using massivegodotintegration.example.assets.godot_plush;
 using Mathematics.Fixed;

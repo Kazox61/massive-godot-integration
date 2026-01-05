@@ -1,6 +1,6 @@
 ﻿using Godot;
 using Massive;
-using massivegodotintegration.addons.massive_godot_integration.Components;
+using massivegodotintegration.addons.massive_godot_integration.components;
 
 namespace massivegodotintegration.addons.massive_godot_integration.synchronizer;
 
@@ -67,8 +67,9 @@ public class EntityViewSynchronizer {
 			GD.PrintErr($"Failed to instantiate PackedScene at path: {viewAsset.PackedScenePath}");
 			return;
 		}
-		
-		entityView.AssignEntity(_world, _world.GetEntity(entityId));
+
+		var entity = _world.GetEntity(entityId);
+		entityView.AssignEntity(_world, entity);
 
 		var tree = Engine.GetMainLoop() as SceneTree;
 		if (tree == null) {
