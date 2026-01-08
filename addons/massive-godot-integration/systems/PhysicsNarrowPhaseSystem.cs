@@ -12,8 +12,8 @@ public class PhysicsNarrowPhaseSystem : NetSystem, IUpdate {
 			ref var colB = ref pair.B.Get<BoxCollider>();
 
 			// update collider centres
-			colA.Centre = pair.A.Get<Transform>().Position;
-			colB.Centre = pair.B.Get<Transform>().Position;
+			colA.Center = pair.A.Get<Transform>().Position;
+			colB.Center = pair.B.Get<Transform>().Position;
 
 			var gjk = GJK.Calculate(colA, colB);
 
