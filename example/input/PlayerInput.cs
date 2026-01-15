@@ -1,6 +1,8 @@
-﻿namespace massivegodotintegration.example.input;
+﻿using Massive.Netcode;
 
-public struct PlayerInput {
+namespace massivegodotintegration.example.input;
+
+public struct PlayerInput : IInput {
 	public float DirectionX;
 	public float DirectionY;
 	public bool Kill;

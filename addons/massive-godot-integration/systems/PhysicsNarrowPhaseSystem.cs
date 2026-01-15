@@ -22,7 +22,7 @@ public class PhysicsNarrowPhaseSystem : NetSystem, IUpdate {
 				return;
 			}
 
-			var collision = EPA.Calculate(gjk.Simplex, colA, colB);
+			var collision = EPA.Calculate(gjk.Simplex, colA, colB, 10000);
 
 			World.Create(new Contact {
 				EntifierA = pair.A.Entifier,
