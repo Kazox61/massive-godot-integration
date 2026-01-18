@@ -1,7 +1,7 @@
 ﻿using Godot;
 using Massive;
 using massivegodotintegration.addons.massive_godot_integration.components;
-using Mathematics.Fixed;
+using Fixed64;
 
 namespace massivegodotintegration.addons.massive_godot_integration.synchronizer;
 

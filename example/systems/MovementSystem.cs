@@ -1,11 +1,10 @@
-﻿using Godot;
-using Massive;
+﻿using Massive;
 using Massive.Netcode;
 using massivegodotintegration.addons.massive_godot_integration;
 using massivegodotintegration.addons.massive_godot_integration.components;
 using massivegodotintegration.example.components;
 using massivegodotintegration.example.input;
-using Mathematics.Fixed;
+using Fixed64;
 
 namespace massivegodotintegration.example.systems;
 

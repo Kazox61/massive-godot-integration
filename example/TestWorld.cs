@@ -1,5 +1,5 @@
 using System;
-using System.IO;
+using Fixed64;
 using Godot;
 using Massive;
 using Massive.Netcode;
@@ -9,7 +9,6 @@ using massivegodotintegration.addons.massive_godot_integration.synchronizer;
 using massivegodotintegration.addons.massive_godot_integration.systems;
 using massivegodotintegration.example.components;
 using massivegodotintegration.example.systems;
-using Mathematics.Fixed;
 
 namespace massivegodotintegration.example;
 

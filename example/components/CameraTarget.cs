@@ -1,5 +1,5 @@
 ﻿using Massive;
-using Mathematics.Fixed;
+using Fixed64;
 
 namespace massivegodotintegration.example.components;
 
