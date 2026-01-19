@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Godot;
+using massivegodotintegration.example.input;
 
 namespace Massive.Netcode;
 
@@ -49,11 +50,11 @@ public class Server {
 			connection.Update();
 
 			while (connection.TryDequeueInput(out var tick, out var input)) {
-				if (tick < _currentTick - _maximumDelayedInputTicks || tick > _currentTick) {
+				if (tick < _lastApprovedTick) {
 					continue;
 				}
 				
-				_session.Inputs.SetAt(tick, inputChannel, input);
+				_session.Inputs.SetAt(tick, inputChannel, (PlayerInput)input);
 				_pendingInputs.Add((tick, inputChannel, input));
 			}
 			
@@ -73,6 +74,8 @@ public class Server {
 		}
 		
 		ProcessTick(deltaTime);
+
+		_session.Inputs.DiscardUpTo(_lastApprovedTick);
 	}
 	
 	private void ProcessTick(double deltaTime) {
@@ -95,7 +98,7 @@ public class Server {
 		}
 
 		for (var unapprovedTick = _lastApprovedTick; unapprovedTick < _currentTick; unapprovedTick++) {
-			var allInputs = _session.Inputs.GetAllInputsAt<IInput>(unapprovedTick);
+			var allInputs = _session.Inputs.GetAllInputsAt<PlayerInput>(unapprovedTick);
 			// Ensure there are 2 connected clients before approving ticks (lobby with 2 players)
 			var hasAllInputs = allInputs.UsedChannels >= ConnectedChannels && ConnectedChannels >= 2;
 			if (!hasAllInputs) {
@@ -104,7 +107,6 @@ public class Server {
 			
 			_lastApprovedTick = unapprovedTick;
 		}
-		_session.Inputs.DiscardUpTo(_lastApprovedTick);
 		
 		foreach (var (inputChannel, connection) in _channelConnections) {
 			connection.SendMessage(new TickSyncMessage2 {
