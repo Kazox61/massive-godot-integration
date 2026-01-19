@@ -7,7 +7,7 @@ public class Client2 {
 
 	public TickSync TickSync { get; }
 	
-	public IConnection Connection { get; }
+	public ITransport Transport { get; }
 	public GenericTypeLookup<IInput> InputTypeLookup { get; }
 
 	public int ApprovedTick { get; private set; }
@@ -19,30 +19,34 @@ public class Client2 {
 	
 	private float _lastPingTime;
 
-	public Client2(IConnection connection, SessionConfig sessionConfig) {
-		Connection = connection;
+	public Client2(ITransport transport, SessionConfig sessionConfig) {
+		Transport = transport;
 		InputTypeLookup = new GenericTypeLookup<IInput>();
 		InputTypeLookup.RegisterAll();
 		Session = new Session(sessionConfig, new InputReceiver(this));
 		TickSync = new TickSync(sessionConfig.TickRate, sessionConfig.RollbackTicksCapacity);
 	}
 
-	public void Connect() { }
+	public void Connect() {
+		Transport.Connect();
+	}
 
 	public void Disconnect() { }
 
 	public void Update(float clientTime) {
 		if (clientTime - _lastPingTime >= 1f) {
 			_lastPingTime = clientTime;
-			Connection.SendMessage(new PingMessage {
+			Transport.Connection.SendMessage(new PingMessage {
 				ClientStartTime = clientTime
 			});
 		}
 		
-		Connection.Update();
-		
-		while (Connection.TryDequeueMessage(out var message)) {
-			HandleMessage(clientTime, message);
+		Transport.Update();
+
+		if (Transport.IsConnected) {
+			while (Transport.Connection.TryDequeueMessage(out var message)) {
+				HandleMessage(clientTime, message);
+			}
 		}
 
 		TickSync.ApproveSimulationTick(ApprovedTick);
@@ -66,6 +70,7 @@ public class Client2 {
 	private void HandleMessage(float clientTime, NetMessage message) {
 		switch (message) {
 			case TickSyncMessage tickSyncMessage:
+				LocalInputChannel = tickSyncMessage.InputChannel;
 				ApprovedTick = tickSyncMessage.ApprovedTick;
 				ServerTime = tickSyncMessage.ServerTime;
 				break;

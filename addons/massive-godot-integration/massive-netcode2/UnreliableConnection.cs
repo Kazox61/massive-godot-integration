@@ -24,7 +24,7 @@ public class UnreliableConnection : IConnection {
 
 			switch (message) {
 				case TickSyncMessage tickSyncMessage:
-					foreach (var tick in tickSyncMessage.ApprovedInputs) {
+					foreach (var tick in tickSyncMessage.AcknowledgedInputs) {
 						_pendingInputs.Remove(tick);
 					}
 

@@ -11,8 +11,10 @@ public class InputReceiver : IInputReceiver {
 		if (channel != _client2.LocalInputChannel) {
 			return;
 		}
-		
-		// _client2.Connection.SendInput(tick, (IInput)input);
+
+		if (_client2.Transport.IsConnected) {
+			_client2.Transport.Connection.SendInput(tick, (IInput)input);
+		}
 	}
 
 	public void SetInputsAt<T>(int tick, AllInputs<T> allInputs) where T : IInput {
