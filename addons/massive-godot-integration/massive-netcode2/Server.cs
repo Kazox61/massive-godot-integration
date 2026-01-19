@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Godot;
-using massivegodotintegration.example.input;
 
 namespace Massive.Netcode;
 
@@ -11,7 +9,7 @@ public class Server {
 	private readonly Session _session;
 	private readonly int _tickRate;
 	private int _currentTick;
-	private int _maximumDelayedInputTicks;
+	private readonly int _maximumDelayedInputTicks;
 	private double _accumulator;
 	private int _lastApprovedTick;
 
@@ -70,6 +68,10 @@ public class Server {
 			}
 		}
 		
+		if (ConnectedChannels < 2) { // lobby with 2 players
+			return;
+		}
+		
 		ProcessTick(deltaTime);
 	}
 	
@@ -94,7 +96,8 @@ public class Server {
 
 		for (var unapprovedTick = _lastApprovedTick; unapprovedTick < _currentTick; unapprovedTick++) {
 			var allInputs = _session.Inputs.GetAllInputsAt<IInput>(unapprovedTick);
-			var hasAllInputs = allInputs.UsedChannels >= ConnectedChannels && ConnectedChannels >= 2; // Ensure there are 2 connected clients before approving ticks
+			// Ensure there are 2 connected clients before approving ticks (lobby with 2 players)
+			var hasAllInputs = allInputs.UsedChannels >= ConnectedChannels && ConnectedChannels >= 2;
 			if (!hasAllInputs) {
 				break;
 			}

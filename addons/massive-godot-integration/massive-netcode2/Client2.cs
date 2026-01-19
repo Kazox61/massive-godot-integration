@@ -60,17 +60,8 @@ public class Client2 {
 							if (inputChannel == LocalInputChannel) {
 								continue;
 							}
-					
-							// GD.Print($"Received other input for tick {tick} on channel {inputChannel}, ApprovedTick: {ApprovedTick}");
-							var playerInput = (PlayerInput)input;
-
-							var moveInput = new Vector2(playerInput.DirectionX, playerInput.DirectionY);
-							if (!moveInput.IsZeroApprox()) {
-								// GD.Print($"Received new move input from other channel which is not the default: {moveInput} at tick {tick}, ApprovedTick: {ApprovedTick}");
-							}
 							
-							
-							Session.Inputs.SetAt(tick, inputChannel, input);
+							Session.Inputs.SetAt(tick, inputChannel, (PlayerInput)input); // not sure why but the cast is necessary
 						}
 						
 						break;
