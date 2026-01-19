@@ -13,6 +13,7 @@ public partial class TestClient : Node {
 	private float _clientTime;
 
 	public override void _Ready() {
+		/*
 		var clientConfig = new SocketConfig {
 			ChallengeDifficulty = 20, // Difficulty 20 is fairly hard
 			ChannelTypes = [
@@ -26,8 +27,9 @@ public partial class TestClient : Node {
 			},
 			UseSimulator = true
 		};
-
 		var transport = new UdpClientTransport(clientConfig);
+		*/
+		var transport = new TcpClientTransport("127.0.0.1", 1987);
 		Client = new Client2(transport, new SessionConfig());
 		Client.Connect();
 	}

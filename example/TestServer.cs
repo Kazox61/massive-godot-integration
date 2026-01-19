@@ -10,6 +10,7 @@ public partial class TestServer : Node {
 	public Server Server;
 
 	public override void _Ready() {
+		/*
 		var transport = new UdpServerTransport(
 			new SocketConfig {
 				ChallengeDifficulty = 20, // Difficulty 20 is fairly hard
@@ -25,6 +26,8 @@ public partial class TestServer : Node {
 				UseSimulator = true 
 			}
 		);
+		*/
+		var transport = new TcpServerTransport(1987);
 		Server = new Server(transport, new SessionConfig());
 		Server.Start();
 	}

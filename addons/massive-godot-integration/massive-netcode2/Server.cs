@@ -73,6 +73,7 @@ public class Server {
 			_lastApprovedTick = _currentTick - _maximumDelayedInputTicks;
 		}
 
+		_session.Inputs.PopulateUpTo(_currentTick);
 		for (var unapprovedTick = _lastApprovedTick; unapprovedTick < _currentTick; unapprovedTick++) {
 			try {
 				var allInputs = _session.Inputs.GetAllInputsAt<IInput>(unapprovedTick);
@@ -88,6 +89,7 @@ public class Server {
 			
 			_lastApprovedTick = unapprovedTick;
 		}
+		_session.Inputs.DiscardUpTo(_lastApprovedTick);
 		
 		
 		var lastApprovedInputs = new Dictionary<int, IInput>();

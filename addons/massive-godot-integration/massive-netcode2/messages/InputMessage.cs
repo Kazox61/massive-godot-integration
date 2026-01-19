@@ -5,7 +5,7 @@ using massivegodotintegration.example.input;
 namespace Massive.Netcode;
 
 public class InputMessage : NetMessage {
-	public Dictionary<int, IInput> PendingInputs { get; set; }
+	public Dictionary<int, IInput> PendingInputs { get; set; } = [];
 	
 	public override byte[] ToBytes() {
 		using var stream = new MemoryStream();
