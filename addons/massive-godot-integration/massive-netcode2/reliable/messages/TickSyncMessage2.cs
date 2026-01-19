@@ -4,12 +4,11 @@ using massivegodotintegration.example.input;
 
 namespace Massive.Netcode;
 
-public class TickSyncMessage : NetMessage {
+public class TickSyncMessage2 : NetMessage {
 	public int InputChannel { get; set; } // workaround to notify the client about its input channel
 	public int ApprovedTick { get; set; }
 	public float ServerTime { get; set; }
-	public int[] AcknowledgedInputs { get; set; }
-	public Dictionary<int, IInput> LastApprovedInputs { get; set; }
+	public List<(int tick, int inputChannel, IInput input)> Inputs { get; set; } = [];
 	
 	
 	public override byte[] ToBytes() {
@@ -18,13 +17,9 @@ public class TickSyncMessage : NetMessage {
 		writer.Write(InputChannel);
 		writer.Write(ApprovedTick);
 		writer.Write(ServerTime);
-		writer.Write(AcknowledgedInputs.Length);
-		foreach (var inputTick in AcknowledgedInputs) {
-			writer.Write(inputTick);
-		}
-
-		writer.Write(LastApprovedInputs.Count);
-		foreach (var (inputChannel, input) in LastApprovedInputs) {
+		writer.Write(Inputs.Count);
+		foreach (var (tick, inputChannel, input) in Inputs) {
+			writer.Write(tick);
 			writer.Write(inputChannel);
 			//TODO: use InputTypeLookup to write type id
 			var inputBytes = input.ToBytes();
@@ -42,14 +37,9 @@ public class TickSyncMessage : NetMessage {
 		ApprovedTick = reader.ReadInt32();
 		ServerTime = reader.ReadSingle();
 		var inputsCount = reader.ReadInt32();
-		AcknowledgedInputs = new int[inputsCount];
+		Inputs = [];
 		for (var i = 0; i < inputsCount; i++) {
-			AcknowledgedInputs[i] = reader.ReadInt32();
-		}
-		
-		var lastApprovedInputsCount = reader.ReadInt32();
-		LastApprovedInputs = new Dictionary<int, IInput>(lastApprovedInputsCount);
-		for (var i = 0; i < lastApprovedInputsCount; i++) {
+			var tick = reader.ReadInt32();
 			var inputChannel = reader.ReadInt32();
 			var inputLength = reader.ReadInt32();
 			var inputBytes = reader.ReadBytes(inputLength);
@@ -57,7 +47,7 @@ public class TickSyncMessage : NetMessage {
 			//TODO: use InputTypeLookup to create correct input type
 			var input = new PlayerInput();
 			input.FromBytes(inputBytes);
-			LastApprovedInputs[inputChannel] = input;
+			Inputs.Add((tick, inputChannel, input));
 		}
 	}
 }

@@ -10,6 +10,7 @@ public class ReliableConnection : IConnection {
 	private readonly GenericTypeLookup<NetMessage> _messageTypeLookup = new();
 
 	private readonly Queue<NetMessage> _incoming = new();
+	private readonly Queue<(int tick, IInput input)> _incomingInputs = new();
 
 	public ReliableConnection(ISocket socket) {
 		_socket = socket;
@@ -20,7 +21,23 @@ public class ReliableConnection : IConnection {
 		while (_socket.TryReceive(out var payload)) {
 			var message = CreateMessage(payload.ToArray());
 			_incoming.Enqueue(message);
+			switch (message) {
+				case InputMessage2 inputMessage2:
+					_incomingInputs.Enqueue((inputMessage2.Tick, inputMessage2.Input));
+					break;
+			}
 		}
+	}
+	
+	public bool TryDequeueInput(out int tick, out IInput input) {
+		if (_incomingInputs.Count > 0) {
+			(tick, input) = _incomingInputs.Dequeue();
+			return true;
+		}
+
+		tick = 0;
+		input = null!;
+		return false;
 	}
 
 	public bool TryDequeueMessage(out NetMessage message) {
@@ -34,7 +51,10 @@ public class ReliableConnection : IConnection {
 	}
 
 	public void SendInput(int tick, IInput input) {
-		SendMessage(new InputMessage());
+		SendMessage(new InputMessage2 {
+			Tick = tick,
+			Input = input
+		});
 	}
 
 	public void SendMessage(NetMessage message) {

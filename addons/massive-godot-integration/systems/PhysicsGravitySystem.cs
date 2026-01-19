@@ -14,7 +14,7 @@ public class PhysicsGravitySystem : NetSystem, IUpdate {
 				return;
 			}
 
-			body.Velocity += Gravity * (FP.One / Session.Config.TickRate.ToFP());
+			// body.Velocity += Gravity * (FP.One / Session.Config.TickRate.ToFP());
 		});
 	}
 }

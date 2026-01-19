@@ -11,6 +11,7 @@ public class UnreliableConnection : IConnection {
 	private readonly Dictionary<int, IInput> _pendingInputs = new();
 
 	private readonly Queue<NetMessage> _incoming = new();
+	private readonly Queue<(int tick, IInput input)> _incomingInputs = new();
 
 	public UnreliableConnection(ISocket socket) {
 		_socket = socket;
@@ -23,6 +24,9 @@ public class UnreliableConnection : IConnection {
 			_incoming.Enqueue(message);
 
 			switch (message) {
+				case InputMessage2 inputMessage2:
+					_incomingInputs.Enqueue((inputMessage2.Tick, inputMessage2.Input));
+					break;
 				case TickSyncMessage tickSyncMessage:
 					foreach (var tick in tickSyncMessage.AcknowledgedInputs) {
 						_pendingInputs.Remove(tick);
@@ -31,6 +35,17 @@ public class UnreliableConnection : IConnection {
 					break;
 			}
 		}
+	}
+	
+	public bool TryDequeueInput(out int tick, out IInput input) {
+		if (_incomingInputs.Count > 0) {
+			(tick, input) = _incomingInputs.Dequeue();
+			return true;
+		}
+
+		tick = 0;
+		input = null!;
+		return false;
 	}
 
 	public bool TryDequeueMessage(out NetMessage message) {

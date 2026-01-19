@@ -1,4 +1,5 @@
 ﻿using Godot;
+using massivegodotintegration.example.input;
 
 namespace Massive.Netcode;
 
@@ -45,40 +46,47 @@ public class Client2 {
 
 		if (Transport.IsConnected) {
 			while (Transport.Connection.TryDequeueMessage(out var message)) {
-				HandleMessage(clientTime, message);
+				switch (message) {
+					case TickSyncMessage2 tickSyncMessage2:
+						LocalInputChannel = tickSyncMessage2.InputChannel;
+						ApprovedTick = tickSyncMessage2.ApprovedTick;
+						ServerTime = tickSyncMessage2.ServerTime;
+						
+						TickSync.UpdateTimeSync(ServerTime, clientTime);
+						
+						foreach (var (tick, inputChannel, input) in tickSyncMessage2.Inputs) {
+							// GD.Print($"Client {LocalInputChannel} received input for tick {tick} for channel {inputChannel}");
+							// Skip local input; it was already applied when sent, it will be an infinite loop otherwise
+							if (inputChannel == LocalInputChannel) {
+								continue;
+							}
+					
+							// GD.Print($"Received other input for tick {tick} on channel {inputChannel}, ApprovedTick: {ApprovedTick}");
+							var playerInput = (PlayerInput)input;
+
+							var moveInput = new Vector2(playerInput.DirectionX, playerInput.DirectionY);
+							if (!moveInput.IsZeroApprox()) {
+								// GD.Print($"Received new move input from other channel which is not the default: {moveInput} at tick {tick}, ApprovedTick: {ApprovedTick}");
+							}
+							
+							
+							Session.Inputs.SetAt(tick, inputChannel, input);
+						}
+						
+						break;
+					case PongMessage pongMessage:
+						var rtt = clientTime - pongMessage.ClientStartTime;
+						GD.Print($"RTT: {rtt}");
+						TickSync.UpdateRTT(rtt);
+						break;
+				}
 			}
 		}
 
-		TickSync.ApproveSimulationTick(ApprovedTick);
-		TickSync.UpdateTimeSync(ServerTime, clientTime);
 		
-		/*
-		foreach (var (inputChannel, input) in ApprovedTickInputs) {
-			// Skip local input; it was already applied when sent, it will be an infinite loop otherwise
-			if (inputChannel == LocalInputChannel) {
-				continue;
-			}
-			
-			Session.Inputs.SetAt(ApprovedTick, inputChannel, input);
-		}
-		*/
+		TickSync.ApproveSimulationTick(ApprovedTick);
 
 		TargetTick = TickSync.CalculateTargetTick(clientTime);
-		// Session.Loop.FastForwardToTick(TargetTick);
-	}
-	
-	private void HandleMessage(float clientTime, NetMessage message) {
-		switch (message) {
-			case TickSyncMessage tickSyncMessage:
-				LocalInputChannel = tickSyncMessage.InputChannel;
-				ApprovedTick = tickSyncMessage.ApprovedTick;
-				ServerTime = tickSyncMessage.ServerTime;
-				break;
-			case PongMessage pongMessage:
-				var rtt = clientTime - pongMessage.ClientStartTime;
-				GD.Print($"RTT: {rtt}");
-				TickSync.UpdateRTT(rtt);
-				break;
-		}
+		Session.Loop.FastForwardToTick(TargetTick);
 	}
 }
