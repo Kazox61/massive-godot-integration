@@ -8,7 +8,7 @@ public class Client2 {
 
 	public TickSync TickSync { get; }
 	
-	public ITransport Transport { get; }
+	public ITransportClient TransportClient { get; }
 	public GenericTypeLookup<IInput> InputTypeLookup { get; }
 
 	public int ApprovedTick { get; private set; }
@@ -18,10 +18,12 @@ public class Client2 {
 	
 	public int LocalInputChannel { get; private set; }
 	
+	public readonly MessageSerializer MessageSerializer = new();
+	
 	private float _lastPingTime;
 
-	public Client2(ITransport transport, SessionConfig sessionConfig) {
-		Transport = transport;
+	public Client2(ITransportClient transportClient, SessionConfig sessionConfig) {
+		TransportClient = transportClient;
 		InputTypeLookup = new GenericTypeLookup<IInput>();
 		InputTypeLookup.RegisterAll();
 		Session = new Session(sessionConfig, new InputReceiver(this));
@@ -29,7 +31,7 @@ public class Client2 {
 	}
 
 	public void Connect() {
-		Transport.Connect();
+		TransportClient.Connect();
 	}
 
 	public void Disconnect() { }
@@ -37,17 +39,21 @@ public class Client2 {
 	public void Update(float clientTime) {
 		if (clientTime - _lastPingTime >= 1f) {
 			_lastPingTime = clientTime;
-			Transport.Connection.SendMessage(new PingMessage {
-				ClientStartTime = clientTime
-			});
+			var messageBytes = MessageSerializer.CreateBytes(
+				new PingMessage {
+					ClientStartTime = clientTime
+				}
+			);
+			TransportClient.Socket.Send(messageBytes);
 		}
 		
-		Transport.Update();
+		TransportClient.Update();
 
-		if (Transport.IsConnected) {
-			while (Transport.Connection.TryDequeueMessage(out var message)) {
+		if (TransportClient.IsConnected) {
+			while (TransportClient.Socket.TryReceive(out var payload)) {
+				var message = MessageSerializer.CreateMessage(payload.ToArray());
 				switch (message) {
-					case TickSyncMessage2 tickSyncMessage2:
+					case TickSyncMessage tickSyncMessage2:
 						LocalInputChannel = tickSyncMessage2.InputChannel;
 						ApprovedTick = tickSyncMessage2.ApprovedTick;
 						ServerTime = tickSyncMessage2.ServerTime;
@@ -55,7 +61,6 @@ public class Client2 {
 						TickSync.UpdateTimeSync(ServerTime, clientTime);
 						
 						foreach (var (tick, inputChannel, input) in tickSyncMessage2.Inputs) {
-							// GD.Print($"Client {LocalInputChannel} received input for tick {tick} for channel {inputChannel}");
 							// Skip local input; it was already applied when sent, it will be an infinite loop otherwise
 							if (inputChannel == LocalInputChannel) {
 								continue;
@@ -67,7 +72,6 @@ public class Client2 {
 						break;
 					case PongMessage pongMessage:
 						var rtt = clientTime - pongMessage.ClientStartTime;
-						GD.Print($"RTT: {rtt}");
 						TickSync.UpdateRTT(rtt);
 						break;
 				}

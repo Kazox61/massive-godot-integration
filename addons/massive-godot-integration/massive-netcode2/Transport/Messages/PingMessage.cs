@@ -2,16 +2,17 @@
 
 namespace Massive.Netcode;
 
-public class PongMessage : NetMessage {
+public class PingMessage : INetMessage {
 	public float ClientStartTime;
 	
-	public override byte[] ToBytes() {
+	public byte[] ToBytes() {
 		using var stream = new MemoryStream();
 		using var writer = new BinaryWriter(stream);
 		writer.Write(ClientStartTime);
 		return stream.ToArray();
 	}
-	public override void FromBytes(byte[] bytes) {
+	
+	public void FromBytes(byte[] bytes) {
 		using var stream = new MemoryStream(bytes);
 		using var reader = new BinaryReader(stream);
 		ClientStartTime = reader.ReadSingle();

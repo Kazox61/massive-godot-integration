@@ -8,7 +8,7 @@ namespace Massive.Netcode;
 
 public class UdpServerTransport : ITransportHost {
 	private readonly RuffleSocket _server;
-	private readonly Queue<IConnection> _pendingAccepts = new();
+	private readonly Queue<ISocket> _pendingAccepts = new();
 	
 	private readonly Dictionary<Connection, UdpSocket> _sockets = new();
 
@@ -35,9 +35,8 @@ public class UdpServerTransport : ITransportHost {
 		switch (serverEvent.Type) {
 			case NetworkEventType.Connect:
 				var udpSocket = new UdpSocket(serverEvent.Connection);
-				var connection = new UnreliableConnection(udpSocket);
 				_sockets[serverEvent.Connection] = udpSocket;
-				_pendingAccepts.Enqueue(connection);
+				_pendingAccepts.Enqueue(udpSocket);
 				break;
 			case NetworkEventType.Data:
 				ReadOnlySpan<byte> bytes = serverEvent.Data.Array.AsSpan(serverEvent.Data.Offset, serverEvent.Data.Count);
@@ -48,5 +47,5 @@ public class UdpServerTransport : ITransportHost {
 		}
 	}
 
-	public bool TryAccept(out IConnection connection) => _pendingAccepts.TryDequeue(out connection);
+	public bool TryAccept(out ISocket socket) => _pendingAccepts.TryDequeue(out socket);
 }

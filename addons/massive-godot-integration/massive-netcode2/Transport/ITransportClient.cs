@@ -1,8 +1,7 @@
 ﻿namespace Massive.Netcode;
 
-public interface ITransport {
+public interface ITransportClient {
 	bool IsConnected { get; }
-	IConnection Connection { get; }
 	ISocket Socket { get; }
 
 	void Connect();

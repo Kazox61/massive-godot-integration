@@ -42,7 +42,7 @@ public partial class TestClient : Node {
 		};
 		var transport = new UdpClientTransport(clientConfig);
 		*/
-		var transport = new TcpClientTransport("127.0.0.1", 1987);
+		var transport = new TcpTransportClient("127.0.0.1", 1987);
 		Client = new Client2(transport, new SessionConfig());
 		Client.Connect();
 		CreateGame();
@@ -79,17 +79,17 @@ public partial class TestClient : Node {
 			HalfExtents = new FVector3(10.ToFP(), 1.ToFP(), 10.ToFP())
 		});
 
-		var player = Session.World.CreateEntity(new Player { InputChannel = 0 });
-		player.Set(new Transform { Position = new FVector3(6.ToFP(), 10.ToFP(), 0.ToFP()) });
-		player.Set(new ViewAsset { PackedScenePath = "res://example/player.tscn" });
-		player.Set(new RigidBody {
+		var player1 = Session.World.CreateEntity(new Player { InputChannel = 0 });
+		player1.Set(new Transform { Position = new FVector3(6.ToFP(), 10.ToFP(), 0.ToFP()) });
+		player1.Set(new ViewAsset { PackedScenePath = "res://example/player.tscn" });
+		player1.Set(new RigidBody {
 			Velocity = FVector3.Zero,
 			InverseMass = FP.One,
 			Restitution = FP.Zero,
 			Friction = 0.5f.ToFP(),
 			UseGravity = true
 		});
-		player.Set(new BoxCollider {
+		player1.Set(new BoxCollider {
 			HalfExtents = new FVector3(0.5f.ToFP(), 0.8f.ToFP(), 0.5f.ToFP())
 		});
 		
@@ -122,7 +122,7 @@ public partial class TestClient : Node {
 		
 		var camera = Session.World.CreateEntity(new Camera());
 		camera.Set(new CameraTarget {
-			TargetEntity = player,
+			TargetEntity = player1,
 			Offset = new FVector3(FP.Zero, 8.ToFP(), 8.ToFP())
 		});
 		camera.Set(new ViewAsset { PackedScenePath = "res://example/camera.tscn" });
@@ -134,7 +134,7 @@ public partial class TestClient : Node {
 		GodotEntitySynchronization.SubscribeViews();
 	}
 
-	public override void _Process(double delta) {
+	public override void _PhysicsProcess(double delta) {
 		_clientTime += (float)delta;
 		
 		var inputDirection = Input.GetVector("left", "right", "up", "down").Normalized();

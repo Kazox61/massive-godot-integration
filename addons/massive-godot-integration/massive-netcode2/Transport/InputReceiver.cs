@@ -12,8 +12,14 @@ public class InputReceiver : IInputReceiver {
 			return;
 		}
 
-		if (_client2.Transport.IsConnected) {
-			_client2.Transport.Connection.SendInput(tick, (IInput)input);
+		if (_client2.TransportClient.IsConnected) {
+			var messageBytes = _client2.MessageSerializer.CreateBytes(
+				new InputMessage {
+					Tick = tick,
+					Input = (IInput)input
+				}
+			);
+			_client2.TransportClient.Socket.Send(messageBytes);
 		}
 	}
 

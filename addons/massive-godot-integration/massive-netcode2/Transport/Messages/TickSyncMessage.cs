@@ -4,14 +4,14 @@ using massivegodotintegration.example.input;
 
 namespace Massive.Netcode;
 
-public class TickSyncMessage2 : NetMessage {
+public class TickSyncMessage : INetMessage {
 	public int InputChannel { get; set; } // workaround to notify the client about its input channel
 	public int ApprovedTick { get; set; }
 	public float ServerTime { get; set; }
 	public List<(int tick, int inputChannel, IInput input)> Inputs { get; set; } = [];
 	
 	
-	public override byte[] ToBytes() {
+	public byte[] ToBytes() {
 		using var stream = new MemoryStream();
 		using var writer = new BinaryWriter(stream);
 		writer.Write(InputChannel);
@@ -30,7 +30,7 @@ public class TickSyncMessage2 : NetMessage {
 		return stream.ToArray();
 	}
 	
-	public override void FromBytes(byte[] bytes) {
+	public void FromBytes(byte[] bytes) {
 		using var stream = new MemoryStream(bytes);
 		using var reader = new BinaryReader(stream);
 		InputChannel = reader.ReadInt32();
@@ -43,7 +43,6 @@ public class TickSyncMessage2 : NetMessage {
 			var inputChannel = reader.ReadInt32();
 			var inputLength = reader.ReadInt32();
 			var inputBytes = reader.ReadBytes(inputLength);
-			
 			//TODO: use InputTypeLookup to create correct input type
 			var input = new PlayerInput();
 			input.FromBytes(inputBytes);

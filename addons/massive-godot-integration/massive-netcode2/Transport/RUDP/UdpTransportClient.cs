@@ -5,15 +5,14 @@ using Ruffles.Core;
 
 namespace Massive.Netcode;
 
-public class UdpClientTransport : ITransport {
+public class UdpTransportClient : ITransportClient {
 	public bool IsConnected { get; private set; }
-	public IConnection Connection { get; private set; }
 	
 	public ISocket Socket { get; private set; }
 
 	private readonly RuffleSocket _clientSocket;
 	
-	public UdpClientTransport(SocketConfig config) {
+	public UdpTransportClient(SocketConfig config) {
 		_clientSocket = new RuffleSocket(config);
 	}
 
@@ -23,8 +22,6 @@ public class UdpClientTransport : ITransport {
 	}
 	
 	public void Update() {
-		Connection?.Update();
-
 		while (true) {
 			var clientEvent = _clientSocket.Poll();
 			
@@ -36,7 +33,6 @@ public class UdpClientTransport : ITransport {
 				case NetworkEventType.Connect:
 					IsConnected = true;
 					Socket = new UdpSocket(clientEvent.Connection);
-					Connection = new UnreliableConnection(Socket);
 					break;
 				case NetworkEventType.Data:
 					ReadOnlySpan<byte> bytes = clientEvent.Data.Array.AsSpan(clientEvent.Data.Offset, clientEvent.Data.Count);

@@ -3,9 +3,8 @@
 namespace Massive.Netcode;
 
 
-public class TcpClientTransport : ITransport {
+public class TcpTransportClient : ITransportClient {
 	public bool IsConnected { get; private set; }
-	public IConnection Connection { get; private set; }
 	public ISocket Socket { get; private set; }
 
 	private TcpClient _client;
@@ -13,7 +12,7 @@ public class TcpClientTransport : ITransport {
 	private readonly string _host;
 	private readonly int _port;
 
-	public TcpClientTransport(string host, int port) {
+	public TcpTransportClient(string host, int port) {
 		_host = host;
 		_port = port;
 	}
@@ -25,12 +24,8 @@ public class TcpClientTransport : ITransport {
 		_client.Connect(_host, _port);
 
 		Socket = new TcpSocket(_client);
-		Connection = new ReliableConnection(Socket);
 		IsConnected = true;
 	}
 
-	public void Update() {
-		// TCP does not need polling
-		Connection?.Update();
-	}
+	public void Update() { }
 }

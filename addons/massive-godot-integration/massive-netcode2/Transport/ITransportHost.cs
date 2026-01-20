@@ -5,5 +5,5 @@ public interface ITransportHost {
 	void Stop();
 	void Update();
 
-	bool TryAccept(out IConnection connection);
+	bool TryAccept(out ISocket socket);
 }

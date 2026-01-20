@@ -6,7 +6,7 @@ namespace Massive.Netcode;
 
 public class TcpServerTransport : ITransportHost {
 	private readonly TcpListener _listener;
-	private readonly Queue<IConnection> _pendingAccepts = new();
+	private readonly Queue<ISocket> _pendingAccepts = new();
 
 	public TcpServerTransport(int port) {
 		_listener = new TcpListener(IPAddress.Any, port);
@@ -19,10 +19,9 @@ public class TcpServerTransport : ITransportHost {
 		while (_listener.Pending()) {
 			var client = _listener.AcceptTcpClient();
 			var socket = new TcpSocket(client);
-			var connection = new ReliableConnection(socket);
-			_pendingAccepts.Enqueue(connection);
+			_pendingAccepts.Enqueue(socket);
 		}
 	}
 
-	public bool TryAccept(out IConnection connection) => _pendingAccepts.TryDequeue(out connection);
+	public bool TryAccept(out ISocket socket) => _pendingAccepts.TryDequeue(out socket);
 }

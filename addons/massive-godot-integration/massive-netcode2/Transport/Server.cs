@@ -14,12 +14,13 @@ public class Server {
 	private double _accumulator;
 	private int _lastApprovedTick;
 
-	private int ConnectedChannels => _channelConnections.Count;
-	private readonly Dictionary<int, IConnection> _channelConnections = new();
+	private int ConnectedChannels => _connectedSockets.Count;
+	private readonly Dictionary<int, ISocket> _connectedSockets = new();
 	private readonly List<(int tick, int inputChannel, IInput input)> _pendingInputs = [];
 	private int _nextChannelId;
-	
 	private int NextChannelId => _nextChannelId++;
+	
+	private readonly MessageSerializer _messageSerializer = new();
 
 	public Server(ITransportHost transportHost, SessionConfig config) {
 		_transportHost = transportHost;
@@ -39,31 +40,31 @@ public class Server {
 
 		while (_transportHost.TryAccept(out var connection)) {
 			var channelId = NextChannelId;
-			GD.Print($"Accepted new connection, assigning to channel {channelId}.");
-			var connectionAdded = _channelConnections.TryAdd(channelId, connection);
+			var connectionAdded = _connectedSockets.TryAdd(channelId, connection);
 			if (!connectionAdded) {
 				throw new Exception("Failed to add new connection to channel connections.");
 			}
 		}
 
-		foreach (var (inputChannel, connection) in _channelConnections) {
-			connection.Update();
-
-			while (connection.TryDequeueInput(out var tick, out var input)) {
-				if (tick < _lastApprovedTick) {
-					continue;
-				}
-				
-				_session.Inputs.SetAt(tick, inputChannel, (PlayerInput)input);
-				_pendingInputs.Add((tick, inputChannel, input));
-			}
-			
-			while (connection.TryDequeueMessage(out var message)) {
+		foreach (var (inputChannel, socket) in _connectedSockets) {
+			while (socket.TryReceive(out var payload)) {
+				var message = _messageSerializer.CreateMessage(payload.ToArray());
 				switch (message) {
 					case PingMessage pingMessage:
-						connection.SendMessage(new PongMessage {
-							ClientStartTime = pingMessage.ClientStartTime
-						});
+						var messageBytes = _messageSerializer.CreateBytes(
+							new PongMessage {
+								ClientStartTime = pingMessage.ClientStartTime
+							}
+						);
+						socket.Send(messageBytes);
+						break;
+					case InputMessage inputMessage2:
+						if (inputMessage2.Tick < _lastApprovedTick) {
+							continue;
+						}
+				
+						_session.Inputs.SetAt(inputMessage2.Tick, inputChannel, (PlayerInput)inputMessage2.Input);
+						_pendingInputs.Add((inputMessage2.Tick, inputChannel, inputMessage2.Input));
 						break;
 				}
 			}
@@ -108,13 +109,16 @@ public class Server {
 			_lastApprovedTick = unapprovedTick;
 		}
 		
-		foreach (var (inputChannel, connection) in _channelConnections) {
-			connection.SendMessage(new TickSyncMessage2 {
-				InputChannel = inputChannel,
-				ApprovedTick = _lastApprovedTick,
-				ServerTime = (float)(_currentTick / (double)_tickRate),
-				Inputs = _pendingInputs
-			});
+		foreach (var (inputChannel, socket) in _connectedSockets) {
+			var messageBytes = _messageSerializer.CreateBytes(
+				new TickSyncMessage {
+					InputChannel = inputChannel,
+					ApprovedTick = _lastApprovedTick,
+					ServerTime = (float)(_currentTick / (double)_tickRate),
+					Inputs = _pendingInputs
+				}
+			);
+			socket.Send(messageBytes);
 		}
 		
 		_pendingInputs.Clear();
