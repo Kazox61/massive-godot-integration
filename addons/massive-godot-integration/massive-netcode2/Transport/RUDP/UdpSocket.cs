@@ -6,7 +6,6 @@ namespace Massive.Netcode;
 
 public class UdpSocket : ISocket {
 	private readonly Connection _connection;
-	private int _messageCounter;
 	
 	private readonly Queue<byte[]> _receivedData = new();
 	
@@ -16,8 +15,7 @@ public class UdpSocket : ISocket {
 	
 	public void Send(ReadOnlySpan<byte> payload) {
 		var arraySegment = new ArraySegment<byte>(payload.ToArray(), 0, payload.Length);
-		_connection.Send(arraySegment, 0, false, (ulong)_messageCounter);
-		_messageCounter++;
+		_connection.Send(arraySegment, 0, false, 0); // not sure about the notification key? what is it for?
 	}
 	
 	public bool TryReceive(out ReadOnlySpan<byte> payload) {

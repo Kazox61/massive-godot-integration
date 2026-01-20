@@ -15,15 +15,15 @@ public partial class TestServer : Node {
 			new SocketConfig {
 				ChallengeDifficulty = 20, // Difficulty 20 is fairly hard
 				ChannelTypes = [
-					ChannelType.Unreliable
+					ChannelType.Reliable
 				],
-				DualListenPort = 5674,
+				DualListenPort = 1987,
 				SimulatorConfig = new SimulatorConfig {
 					DropPercentage = 0.05f,
 					MaxLatency = 10,
 					MinLatency = 0
 				},
-				UseSimulator = true 
+				UseSimulator = false 
 			}
 		);
 		*/

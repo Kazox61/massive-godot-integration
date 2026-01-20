@@ -11,14 +11,16 @@ public class UdpTransportClient : ITransportClient {
 	public ISocket Socket { get; private set; }
 
 	private readonly RuffleSocket _clientSocket;
+	private readonly IPEndPoint _endPoint;
 	
-	public UdpTransportClient(SocketConfig config) {
+	public UdpTransportClient(IPEndPoint endPoint, SocketConfig config) {
+		_endPoint = endPoint;
 		_clientSocket = new RuffleSocket(config);
 	}
 
 	public void Connect() {
 		_clientSocket.Start();
-		_clientSocket.Connect(new IPEndPoint(IPAddress.Parse("127.0.0.1"), 5674));
+		_clientSocket.Connect(_endPoint);
 	}
 	
 	public void Update() {

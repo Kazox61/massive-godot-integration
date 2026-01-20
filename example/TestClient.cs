@@ -1,4 +1,5 @@
-﻿using Fixed64;
+﻿using System.Net;
+using Fixed64;
 using Godot;
 using Massive;
 using Massive.Netcode;
@@ -9,6 +10,9 @@ using massivegodotintegration.addons.massive_godot_integration.systems;
 using massivegodotintegration.example.components;
 using massivegodotintegration.example.input;
 using massivegodotintegration.example.systems;
+using Ruffles.Channeling;
+using Ruffles.Configuration;
+using Ruffles.Simulation;
 
 namespace massivegodotintegration.example;
 
@@ -26,23 +30,26 @@ public partial class TestClient : Node {
 	private float _clientTime;
 
 	public override void _Ready() {
+		var endPoint = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 1987);
 		/*
-		var clientConfig = new SocketConfig {
-			ChallengeDifficulty = 20, // Difficulty 20 is fairly hard
-			ChannelTypes = [
-				ChannelType.Unreliable
-			],
-			DualListenPort = 0, // Port 0 means we get a port by the operating system
-			SimulatorConfig = new SimulatorConfig {
-				DropPercentage = 0.05f,
-				MaxLatency = 10,
-				MinLatency = 0
-			},
-			UseSimulator = true
-		};
-		var transport = new UdpClientTransport(clientConfig);
+		var transport = new UdpTransportClient(
+			endPoint,
+			new SocketConfig {
+				ChallengeDifficulty = 20, // Difficulty 20 is fairly hard
+				ChannelTypes = [
+					ChannelType.Reliable
+				],
+				DualListenPort = 0, // Port 0 means we get a port by the operating system
+				SimulatorConfig = new SimulatorConfig {
+					DropPercentage = 0.05f,
+					MaxLatency = 10,
+					MinLatency = 0
+				},
+				UseSimulator = false
+			}
+		);
 		*/
-		var transport = new TcpTransportClient("127.0.0.1", 1987);
+		var transport = new TcpTransportClient(endPoint);
 		Client = new Client2(transport, new SessionConfig());
 		Client.Connect();
 		CreateGame();
