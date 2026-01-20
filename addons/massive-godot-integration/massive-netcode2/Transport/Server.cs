@@ -8,7 +8,6 @@ namespace Massive.Netcode;
 public class Server {
 	private readonly ITransportHost _transportHost;
 	private readonly Session _session;
-	private readonly int _tickRate;
 	private int _currentTick;
 	private double _serverTime;
 
@@ -23,7 +22,6 @@ public class Server {
 	public Server(ITransportHost transportHost, SessionConfig config) {
 		_transportHost = transportHost;
 		_session = new Session(config);
-		_tickRate = config.TickRate;
 		_currentTick = config.StartTick;
 	}
 	

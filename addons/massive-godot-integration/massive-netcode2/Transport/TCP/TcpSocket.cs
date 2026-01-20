@@ -19,7 +19,7 @@ public class TcpSocket : ISocket, IDisposable {
 
 	public void Send(ReadOnlySpan<byte> payload)
 	{
-		SendPayloadSlow(payload.ToArray());
+		SendPayloadSlow(payload.ToArray()).Forget();
 	}
 
 	private void SendPayloadFast(ReadOnlySpan<byte> payload)
@@ -31,11 +31,11 @@ public class TcpSocket : ISocket, IDisposable {
 		_stream.Write(payload);
 	}
 
-	private async void SendPayloadSlow(byte[] payload)
+	private async Task SendPayloadSlow(byte[] payload)
 	{
 		await Task.Delay(200);
 
-		byte[] lengthPrefix = new byte[4];
+		var lengthPrefix = new byte[4];
 		BinaryPrimitives.WriteInt32BigEndian(lengthPrefix, payload.Length);
 
 		_stream.Write(lengthPrefix);
