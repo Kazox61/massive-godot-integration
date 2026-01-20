@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Buffers.Binary;
 using System.Net.Sockets;
+using System.Threading.Tasks;
 
 namespace Massive.Netcode;
 
@@ -16,8 +17,25 @@ public class TcpSocket : ISocket, IDisposable {
 		_stream = client.GetStream();
 	}
 
-	public void Send(ReadOnlySpan<byte> payload) {
+	public void Send(ReadOnlySpan<byte> payload)
+	{
+		SendPayloadSlow(payload.ToArray());
+	}
+
+	private void SendPayloadFast(ReadOnlySpan<byte> payload)
+	{
 		Span<byte> lengthPrefix = stackalloc byte[4];
+		BinaryPrimitives.WriteInt32BigEndian(lengthPrefix, payload.Length);
+
+		_stream.Write(lengthPrefix);
+		_stream.Write(payload);
+	}
+
+	private async void SendPayloadSlow(byte[] payload)
+	{
+		await Task.Delay(200);
+
+		byte[] lengthPrefix = new byte[4];
 		BinaryPrimitives.WriteInt32BigEndian(lengthPrefix, payload.Length);
 
 		_stream.Write(lengthPrefix);

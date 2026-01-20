@@ -27,7 +27,7 @@ public class Client2 {
 		InputTypeLookup = new GenericTypeLookup<IInput>();
 		InputTypeLookup.RegisterAll();
 		Session = new Session(sessionConfig, new InputReceiver(this));
-		TickSync = new TickSync(sessionConfig.TickRate, sessionConfig.RollbackTicksCapacity);
+		TickSync = new TickSync(sessionConfig.TickRate, sessionConfig.RollbackTicksCapacity, 4);
 	}
 
 	public void Connect() {
@@ -55,31 +55,30 @@ public class Client2 {
 				switch (message) {
 					case TickSyncMessage tickSyncMessage2:
 						LocalInputChannel = tickSyncMessage2.InputChannel;
+						var lastApprovedTick = tickSyncMessage2.ApprovedTick;
 						ApprovedTick = tickSyncMessage2.ApprovedTick;
-						ServerTime = tickSyncMessage2.ServerTime;
 						
-						TickSync.UpdateTimeSync(ServerTime, clientTime);
-						
-						foreach (var (tick, inputChannel, input) in tickSyncMessage2.Inputs) {
-							// Skip local input; it was already applied when sent, it will be an infinite loop otherwise
-							if (inputChannel == LocalInputChannel) {
-								continue;
-							}
-							
-							Session.Inputs.SetAt(tick, inputChannel, (PlayerInput)input); // not sure why but the cast is necessary
+						TickSync.ApproveSimulationTick(ApprovedTick);
+
+						// Discard all prediction.
+						Session.Inputs.GetInputSet<PlayerInput>().MakeInactualInRange(lastApprovedTick, ApprovedTick);
+
+						foreach (var (tick, inputChannel, input) in tickSyncMessage2.Inputs)
+						{
+							Session.Inputs.SetAt(tick, inputChannel, (PlayerInput)input);
 						}
 						
 						break;
 					case PongMessage pongMessage:
 						var rtt = clientTime - pongMessage.ClientStartTime;
+						ServerTime = pongMessage.ServerTime + rtt * 0.5f;
+						TickSync.UpdateTimeSync(ServerTime, clientTime);
 						TickSync.UpdateRTT(rtt);
+						GD.Print($"RTT: {rtt}");
 						break;
 				}
 			}
 		}
-
-		
-		TickSync.ApproveSimulationTick(ApprovedTick);
 
 		TargetTick = TickSync.CalculateTargetTick(clientTime);
 		Session.Loop.FastForwardToTick(TargetTick);
