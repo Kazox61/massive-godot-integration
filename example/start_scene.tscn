@@ -1,0 +1,10 @@
+[gd_scene format=3 uid="uid://btny8ci2lm7jm"]
+
+[ext_resource type="Script" uid="uid://dx21jvd020v4k" path="res://example/StartScene.cs" id="1_1q41g"]
+[ext_resource type="PackedScene" uid="uid://b7e752alkc522" path="res://example/test_server.tscn" id="2_8fw5g"]
+[ext_resource type="PackedScene" uid="uid://c8qyqd44sary6" path="res://example/test_client.tscn" id="3_j8h17"]
+
+[node name="StartScene" type="Node" unique_id=1972561724]
+script = ExtResource("1_1q41g")
+ServerScene = ExtResource("2_8fw5g")
+ClientScene = ExtResource("3_j8h17")
