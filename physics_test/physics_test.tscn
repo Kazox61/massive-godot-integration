@@ -1,0 +1,13 @@
+[gd_scene format=3 uid="uid://d0ol663ys0jys"]
+
+[ext_resource type="Script" uid="uid://bqimac4ovmsvu" path="res://addons/massive-godot-integration/physics_test/PhysicsTest.cs" id="1_tamee"]
+
+[node name="PhysicsTest" type="Node3D" unique_id=282190896 node_paths=PackedStringArray("From")]
+script = ExtResource("1_tamee")
+From = NodePath("From")
+
+[node name="Camera3D" type="Camera3D" parent="." unique_id=31647312]
+transform = Transform3D(1, 0, 0, 0, 0.7257107, 0.688, 0, -0.6880001, 0.7257107, 0, 38.531338, 44.691505)
+
+[node name="From" type="Node3D" parent="." unique_id=2012044567]
+transform = Transform3D(1, 0, 0, 0, 0.9693468, 0.24569657, 0, -0.24569657, 0.9693468, 0, 0, 74.24294)
