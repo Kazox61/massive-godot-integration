@@ -14,6 +14,7 @@ public class PlayerAttackSystem : NetSystem, IUpdate {
 		World.ForEach((Entity entity, ref Player player, ref Transform transform) => {
 			var playerInput = Inputs.Get<PlayerInput>(player.InputChannel).LastActual();
 			
+			/*
 			if (playerInput.Attack) {
 				var projectile = World.CreateEntity();
 				projectile.Set(new Transform {
@@ -35,6 +36,7 @@ public class PlayerAttackSystem : NetSystem, IUpdate {
 				});
 				projectile.Set(new ViewAsset { PackedScenePath = "res://example/projectile.tscn" });
 			}
+			*/
 		});
 	}
 }

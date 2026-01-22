@@ -1,0 +1,9 @@
+[gd_scene format=3 uid="uid://djgdr8s535mw4"]
+
+[ext_resource type="Script" uid="uid://i38qgapn2o7s" path="res://bepu_physics_test/BepuPhysicstest.cs" id="1_nyyrk"]
+
+[node name="Test" type="Node3D" unique_id=1908529513]
+script = ExtResource("1_nyyrk")
+
+[node name="Camera3D" type="Camera3D" parent="." unique_id=1431262938]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6.602892, 13.305578)

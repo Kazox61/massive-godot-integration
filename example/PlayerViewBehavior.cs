@@ -10,32 +10,37 @@ namespace massivegodotintegration.example;
 public partial class PlayerViewBehavior : ViewBehavior {
 	[Export] private GodotPlushSkin _plushSkin;
 	
-	private DataSet<RigidBody> _rigidBodies;
+	public PhysicsWorld PhysicsWorld { get; set; }
+	
+	private DataSet<PhysicsBody> _physicsBodies;
 	private Entity _entity;
 	
 	public override void OnEntityAssigned(World world, Entity entity) {
+		PhysicsWorld = PhysicsWorld.Instance;
 		_entity = entity;
-		_rigidBodies = world.DataSet<RigidBody>();
+		_physicsBodies = world.DataSet<PhysicsBody>();
 	}
 	public override void OnEntityRemoved() {
-		_rigidBodies = null;
+		_physicsBodies = null;
 		_entity = Entity.Dead;
 	}
 
 	public override void _PhysicsProcess(double delta) {
-		if (!_rigidBodies.Has(_entity.Id)) {
+		if (!_physicsBodies.Has(_entity.Id)) {
 			return;
 		}
 		
-		var rigidBody = _rigidBodies.Get(_entity.Id);
+		var physicsBody = _physicsBodies.Get(_entity.Id);
 		
-		if (rigidBody.Velocity.Y > FP.Half) {
+		var bodyReference = PhysicsWorld.Simulation.Bodies[physicsBody.BodyHandle];
+		
+		if (bodyReference.Velocity.Linear.Y > 0.5f) {
 			_plushSkin.SetState("jump");
 		}
-		else if (rigidBody.Velocity.Y < -FP.Half) {
+		else if (bodyReference.Velocity.Linear.Y < -0.5f) {
 			_plushSkin.SetState("fall");
 		}
-		else if (!FMath.ApproximatelyEqual(rigidBody.Velocity.X, FP.Zero) || !FMath.ApproximatelyEqual(rigidBody.Velocity.Z, FP.Zero)) {
+		else if (!FMath.ApproximatelyEqual(bodyReference.Velocity.Linear.X.ToFP(), FP.Zero) || !FMath.ApproximatelyEqual(bodyReference.Velocity.Linear.Z.ToFP(), FP.Zero)) {
 			_plushSkin.SetState("run");
 		}
 		else {

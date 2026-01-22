@@ -1,4 +1,6 @@
-﻿using Massive;
+﻿using System.Numerics;
+using Fixed64;
+using Massive;
 using Massive.Netcode;
 using massivegodotintegration.addons.massive_godot_integration;
 using Massive.Physics;
@@ -14,8 +16,8 @@ public class CameraFollowSystem : NetSystem, IUpdate {
 			}
 			
 			var playerTransform = cameraTarget.TargetEntity.Get<Transform>();
-			var desiredPosition = playerTransform.Position + cameraTarget.Offset;
-			transform.Position = desiredPosition;
+			var desiredPosition = new FVector3(playerTransform.Position.X.ToFP(), playerTransform.Position.Y.ToFP(),playerTransform.Position.Z.ToFP()) + cameraTarget.Offset;
+			transform.Position = new Vector3(desiredPosition.X.ToFloat(), desiredPosition.Y.ToFloat(), desiredPosition.Z.ToFloat());
 		});
 	}
 }

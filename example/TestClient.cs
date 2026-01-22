@@ -57,6 +57,7 @@ public partial class TestClient : Node {
 	private void CreateGame() {
 		_massiveStats.Initialize(Session.World);
 
+		/*
 		Session.Systems
 			.New<PhysicsGravitySystem>()
 			.New<PhysicsIntegrationSystem>()
@@ -133,6 +134,7 @@ public partial class TestClient : Node {
 		});
 		camera.Set(new ViewAsset { PackedScenePath = "res://example/camera.tscn" });
 		camera.Set(new Transform { Rotation = new FVector3(-45.ToFP() * FP.Deg2Rad, FP.Zero, FP.Zero) });
+		*/
 		
 		Session.World.SaveFrame();
 
