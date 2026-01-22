@@ -1,0 +1,30 @@
+[gd_scene format=3 uid="uid://nsuyynaivi7j"]
+
+[ext_resource type="Script" uid="uid://cxsrd1ym35r6s" path="res://addons/massive-godot-integration/synchronizer/EntityView2d.cs" id="1_k5hov"]
+[ext_resource type="Script" uid="uid://ckax01wlt33f4" path="res://example2/Transform2dViewBehavior.cs" id="1_w27ct"]
+[ext_resource type="Script" uid="uid://5gc3owqluory" path="res://example2/TankViewBehavior.cs" id="3_k5hov"]
+
+[node name="Tank" type="Node2D" unique_id=638299646 node_paths=PackedStringArray("_viewBehaviors")]
+script = ExtResource("1_k5hov")
+_viewBehaviors = [NodePath("TransformViewBehavior"), NodePath("TankViewBehavior")]
+
+[node name="TransformViewBehavior" type="Node" parent="." unique_id=170372059 node_paths=PackedStringArray("_targetNode")]
+script = ExtResource("1_w27ct")
+_targetNode = NodePath("..")
+
+[node name="TankViewBehavior" type="Node" parent="." unique_id=1741187745 node_paths=PackedStringArray("_body", "_gunAnchor")]
+script = ExtResource("3_k5hov")
+_body = NodePath("../Body")
+_gunAnchor = NodePath("../GunAnchor")
+
+[node name="Body" type="Polygon2D" parent="." unique_id=1837391893]
+color = Color(0, 0, 0, 1)
+polygon = PackedVector2Array(-32, -40, 32, -40, 32, 40, -32, 40)
+uv = PackedVector2Array(-32, -40, 32, -40, 32, 40, -32, 40)
+
+[node name="GunAnchor" type="Node2D" parent="." unique_id=1565464829]
+
+[node name="Gun" type="Polygon2D" parent="GunAnchor" unique_id=1796181395]
+position = Vector2(0, -24)
+polygon = PackedVector2Array(-16, -40, 16, -40, 16, 40, -16, 40)
+uv = PackedVector2Array(-16, -40, 16, -40, 16, 40, -32, 40)

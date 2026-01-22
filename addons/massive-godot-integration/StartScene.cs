@@ -1,6 +1,6 @@
 ﻿using Godot;
 
-namespace massivegodotintegration.example;
+namespace massivegodotintegration.addons.massive_godot_integration;
 
 public partial class StartScene : Node {
 	[Export] public PackedScene ServerScene;

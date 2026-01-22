@@ -24,7 +24,7 @@ public partial class TestWorld : Node3D {
 	public override void _Ready() {
 		Session = new Session();
 		
-		_massiveStats.Initialize(Session.World);
+		_massiveStats.Initialize(Session);
 
 		Session.Systems
 			.New<PhysicsGravitySystem>()

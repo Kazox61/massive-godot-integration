@@ -1,8 +1,8 @@
-﻿using massivegodotintegration.addons.massive_godot_integration.components;
+﻿using Godot;
 
 namespace massivegodotintegration.addons.massive_godot_integration.synchronizer;
 
 public struct ViewInstance {
-	public EntityView Instance;
+	public Node Instance;
 	public ViewAsset Asset;
 }

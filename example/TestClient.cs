@@ -52,12 +52,20 @@ public partial class TestClient : Node {
 		var transport = new TcpTransportClient(endPoint);
 		Client = new Client2(transport, new SessionConfig());
 		Client.Connect();
+		
+		Session.World.SaveFrame();
+		
 		CreateGame();
+		
+		Session.World.SaveFrame();
+
+		GodotEntitySynchronization = new GodotEntitySynchronization(Session.World);
+		GodotEntitySynchronization.SubscribeViews();
+		
+		_massiveStats.Initialize(Session);
 	}
 
 	private void CreateGame() {
-		_massiveStats.Initialize(Session.World);
-
 		Session.Systems
 			.New<PhysicsGravitySystem>()
 			.New<PhysicsIntegrationSystem>()
@@ -134,11 +142,6 @@ public partial class TestClient : Node {
 		});
 		camera.Set(new ViewAsset { PackedScenePath = "res://example/camera.tscn" });
 		camera.Set(new Transform { Rotation = new FVector3(-45.ToFP() * FP.Deg2Rad, FP.Zero, FP.Zero) });
-		
-		Session.World.SaveFrame();
-
-		GodotEntitySynchronization = new GodotEntitySynchronization(Session.World);
-		GodotEntitySynchronization.SubscribeViews();
 	}
 
 	public override void _PhysicsProcess(double delta) {

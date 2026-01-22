@@ -62,14 +62,19 @@ public class EntityViewSynchronizer {
 			return;
 		}
 
-		var entityView = packedScene.Instantiate<EntityView>();
+		var entityView = packedScene.Instantiate();
 		if (entityView == null) {
 			GD.PrintErr($"Failed to instantiate PackedScene at path: {viewAsset.PackedScenePath}");
 			return;
 		}
 
 		var entity = _world.GetEntity(entityId);
-		entityView.AssignEntity(_world, entity);
+		if (entityView is IEntityView view) {
+			view.AssignEntity(_world, entity);
+		}
+		else {
+			GD.PrintErr($"Instantiated scene does not implement IEntityView: {viewAsset.PackedScenePath}");
+		}
 
 		var tree = Engine.GetMainLoop() as SceneTree;
 		if (tree == null) {
@@ -82,7 +87,9 @@ public class EntityViewSynchronizer {
 	}
 	
 	private void RemoveViewInstance(int entityId, ViewInstance viewInstance) {
-		viewInstance.Instance.RemoveEntity();
+		if (viewInstance.Instance is IEntityView view) {
+			view.RemoveEntity();
+		}
 		viewInstance.Instance.Free();
 		_viewInstances.Remove(entityId);
 	}

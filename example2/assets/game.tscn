@@ -1,0 +1,14 @@
+[gd_scene format=3 uid="uid://i8hm4ohdn3i1"]
+
+[ext_resource type="Script" uid="uid://bdeuacesxvp4o" path="res://example2/RetroTankRunner.cs" id="1_rq2sc"]
+[ext_resource type="PackedScene" uid="uid://523kihkq6fwh" path="res://addons/massive-godot-integration/massive_stats.tscn" id="2_s0fg5"]
+
+[node name="Game" type="Node2D" unique_id=335414745]
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=179235069]
+
+[node name="RetroTankRunner" type="Node" parent="." unique_id=1776045239 node_paths=PackedStringArray("MassiveStats")]
+script = ExtResource("1_rq2sc")
+MassiveStats = NodePath("../MassiveStats")
+
+[node name="MassiveStats" parent="." unique_id=1301436929 instance=ExtResource("2_s0fg5")]
