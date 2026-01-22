@@ -1,7 +1,7 @@
 ﻿using Massive;
 using Fixed64;
 
-namespace massivegodotintegration.addons.massive_godot_integration.components;
+namespace Massive.Physics;
 
 public struct Contact {
 	public Entifier EntifierA;

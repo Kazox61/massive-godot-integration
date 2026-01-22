@@ -1,6 +1,6 @@
 ﻿using Massive;
 
-namespace massivegodotintegration.addons.massive_godot_integration.components;
+namespace Massive.Physics;
 
 public struct BroadPhasePair {
 	public Entity A;
