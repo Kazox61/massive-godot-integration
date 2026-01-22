@@ -1,6 +1,6 @@
 ﻿using Godot;
 using Massive;
-using massivegodotintegration.addons.massive_godot_integration.components;
+using Massive.Physics;
 
 namespace massivegodotintegration.addons.massive_godot_integration.synchronizer;
 

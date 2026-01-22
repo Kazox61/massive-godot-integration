@@ -1,7 +1,7 @@
 ﻿using Massive;
 using Massive.Netcode;
 using massivegodotintegration.addons.massive_godot_integration;
-using massivegodotintegration.addons.massive_godot_integration.components;
+using Massive.Physics;
 using massivegodotintegration.example.components;
 using massivegodotintegration.example.input;
 using Fixed64;

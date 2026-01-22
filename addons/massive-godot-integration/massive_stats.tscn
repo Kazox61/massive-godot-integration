@@ -5,12 +5,13 @@
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_e26s1"]
 bg_color = Color(0.2123048, 0.21230489, 0.21230471, 0.4627451)
 
-[node name="MassiveStats" type="PanelContainer" unique_id=1458097406 node_paths=PackedStringArray("_entityCountLabel")]
+[node name="MassiveStats" type="PanelContainer" unique_id=1458097406 node_paths=PackedStringArray("_fpsLabel", "_entityCountLabel")]
 anchors_preset = 9
 anchor_bottom = 1.0
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_e26s1")
 script = ExtResource("1_26xrw")
+_fpsLabel = NodePath("MarginContainer/GridContainer/FPS")
 _entityCountLabel = NodePath("MarginContainer/GridContainer/EntityCount")
 
 [node name="MarginContainer" type="MarginContainer" parent="." unique_id=605075003]
@@ -26,7 +27,17 @@ theme_override_constants/h_separation = 16
 theme_override_constants/v_separation = 8
 columns = 2
 
-[node name="Label" type="Label" parent="MarginContainer/GridContainer" unique_id=996533969]
+[node name="Label1" type="Label" parent="MarginContainer/GridContainer" unique_id=1476939586]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "FPS"
+
+[node name="FPS" type="Label" parent="MarginContainer/GridContainer" unique_id=1737650544]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "0"
+
+[node name="Label2" type="Label" parent="MarginContainer/GridContainer" unique_id=996533969]
 layout_mode = 2
 theme_override_font_sizes/font_size = 24
 text = "Entity Count"

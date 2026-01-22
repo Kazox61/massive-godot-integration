@@ -1,6 +1,6 @@
 ﻿using Fixed64;
 
-namespace massivegodotintegration.addons.massive_godot_integration.components;
+namespace Massive.Physics;
 
 public struct RigidBody {
 	public FVector3 Velocity;
