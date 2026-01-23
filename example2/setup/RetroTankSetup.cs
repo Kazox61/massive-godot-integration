@@ -8,6 +8,7 @@ public class RetroTankSetup : IGameSetup {
 		systems
 			.New(() => new MassiveRandom(seed))
 			.New<VelocityUpdateSystem>()
+			.New<AnimationUpdateSystem>()
 			.New<TankSpawnSystem>()
 			.New<TankMovementSystem>()
 			.New<TankShootingSystem>()

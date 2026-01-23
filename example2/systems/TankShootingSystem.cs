@@ -10,26 +10,40 @@ namespace massivegodotintegration.example2;
 public class TankShootingSystem : RetroTankSystem, IUpdate {
 	public void Update() {
 		World.ForEach((Entity entity, ref Tank tank) => {
-			var playerInput = Inputs.Get<PlayerInput>(tank.InputChannel).LastActual();
+			var input = Inputs.Get<PlayerInput>(tank.InputChannel);
+			var playerInput = input.LastActual();
 			var direction = new FVector2(playerInput.AimX.ToFP(), playerInput.AimY.ToFP());
 			if (FVector2.LengthSqr(direction) > FP.Zero) {
 				tank.GunDirection = new FVector2(playerInput.AimX.ToFP(), playerInput.AimY.ToFP());
 			}
 			
-			if (playerInput.Attack) {
+			if (playerInput.Attack && input.IsActual()) {
+				ref var tankTransform = ref entity.Get<Transform2d>();
+				
 				var bullet = World.CreateEntity();
 				bullet.Set(new Bullet {
 					OwnerId = entity.Id,
 					Lifetime = 120
 				});
 				bullet.Set(new Transform2d {
-					Position = entity.Get<Transform2d>().Position,
+					Position = tankTransform.Position,
 					Rotation = FMath.Atan2(tank.GunDirection.X, -tank.GunDirection.Y)
 				});
 				bullet.Set(new Velocity2d {
 					Linear = FVector2.Normalize(tank.GunDirection) * 10.ToFP()
 				});
 				bullet.Set(new ViewAsset { PackedScenePath = $"res://example2/assets/bullet_{tank.Color}.tscn"});
+				
+				var explosion = World.CreateEntity();
+				explosion.Set(new Transform2d {
+					Position = tankTransform.Position
+				});
+				explosion.Set(new Animation {
+					TickDuration = 60,
+					CurrentTick = 0,
+					DestroyOnCompletion = true
+				});
+				explosion.Set(new ViewAsset { PackedScenePath = "res://example2/assets/explosion.tscn" });
 			}
 		});
 	}

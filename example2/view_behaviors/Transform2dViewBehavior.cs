@@ -22,7 +22,7 @@ public partial class Transform2dViewBehavior : ViewBehavior {
 		_entity = Entity.Dead;
 	}
 
-	public override void _PhysicsProcess(double delta) {
+	public override void _Process(double delta) {
 		if (!_transforms.Has(_entity.Id)) {
 			return;
 		}

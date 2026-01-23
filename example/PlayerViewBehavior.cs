@@ -22,7 +22,7 @@ public partial class PlayerViewBehavior : ViewBehavior {
 		_entity = Entity.Dead;
 	}
 
-	public override void _PhysicsProcess(double delta) {
+	public override void _Process(double delta) {
 		if (!_rigidBodies.Has(_entity.Id)) {
 			return;
 		}

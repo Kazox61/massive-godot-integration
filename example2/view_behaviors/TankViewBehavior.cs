@@ -21,7 +21,7 @@ public partial class TankViewBehavior : ViewBehavior {
 		_entity = Entity.Dead;
 	}
 
-	public override void _PhysicsProcess(double delta) {
+	public override void _Process(double delta) {
 		if (!_tanks.Has(_entity.Id)) {
 			return;
 		}
