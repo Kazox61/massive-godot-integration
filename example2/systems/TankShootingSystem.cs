@@ -33,17 +33,6 @@ public class TankShootingSystem : RetroTankSystem, IUpdate {
 					Linear = FVector2.Normalize(tank.GunDirection) * 10.ToFP()
 				});
 				bullet.Set(new ViewAsset { PackedScenePath = $"res://example2/assets/bullet_{tank.Color}.tscn"});
-				
-				var explosion = World.CreateEntity();
-				explosion.Set(new Transform2d {
-					Position = tankTransform.Position
-				});
-				explosion.Set(new Animation {
-					TickDuration = 60,
-					CurrentTick = 0,
-					DestroyOnCompletion = true
-				});
-				explosion.Set(new ViewAsset { PackedScenePath = "res://example2/assets/explosion.tscn" });
 			}
 		});
 	}

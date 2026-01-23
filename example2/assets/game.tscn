@@ -2,6 +2,10 @@
 
 [ext_resource type="Script" uid="uid://bdeuacesxvp4o" path="res://example2/setup/RetroTankRunner.cs" id="1_rq2sc"]
 [ext_resource type="PackedScene" uid="uid://523kihkq6fwh" path="res://addons/massive-godot-integration/massive_stats.tscn" id="2_s0fg5"]
+[ext_resource type="Script" uid="uid://b56donm5csyn8" path="res://example2/ui/PlayerScore.cs" id="3_etwil"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_imc3g"]
+bg_color = Color(0.2123048, 0.21230489, 0.21230471, 0.4627451)
 
 [node name="Game" type="Node2D" unique_id=335414745]
 
@@ -13,3 +17,52 @@ script = ExtResource("1_rq2sc")
 MassiveStats = NodePath("../MassiveStats")
 
 [node name="MassiveStats" parent="." unique_id=1301436929 instance=ExtResource("2_s0fg5")]
+
+[node name="Score" type="CanvasLayer" parent="." unique_id=959758473 node_paths=PackedStringArray("_player1Score", "_player2Score", "_game")]
+script = ExtResource("3_etwil")
+_player1Score = NodePath("PanelContainer/MarginContainer/GridContainer/Player1Score")
+_player2Score = NodePath("PanelContainer/MarginContainer/GridContainer/Player2Score")
+_game = NodePath("../RetroTankRunner")
+
+[node name="PanelContainer" type="PanelContainer" parent="Score" unique_id=1534217669]
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -205.0
+grow_horizontal = 0
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_imc3g")
+
+[node name="MarginContainer" type="MarginContainer" parent="Score/PanelContainer" unique_id=560385000]
+layout_mode = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="GridContainer" type="GridContainer" parent="Score/PanelContainer/MarginContainer" unique_id=1478606067]
+layout_mode = 2
+theme_override_constants/h_separation = 16
+theme_override_constants/v_separation = 8
+columns = 2
+
+[node name="Label" type="Label" parent="Score/PanelContainer/MarginContainer/GridContainer" unique_id=1015512277]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Player1"
+
+[node name="Player1Score" type="Label" parent="Score/PanelContainer/MarginContainer/GridContainer" unique_id=312178835]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "0"
+
+[node name="Label2" type="Label" parent="Score/PanelContainer/MarginContainer/GridContainer" unique_id=193680282]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Player2"
+
+[node name="Player2Score" type="Label" parent="Score/PanelContainer/MarginContainer/GridContainer" unique_id=835604460]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "0"

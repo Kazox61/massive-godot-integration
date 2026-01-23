@@ -12,7 +12,8 @@ public class RetroTankSetup : IGameSetup {
 			.New<TankSpawnSystem>()
 			.New<TankMovementSystem>()
 			.New<TankShootingSystem>()
-			.New<BulletLifetimeSystem>();
+			.New<BulletLifetimeSystem>()
+			.New<BulletHitSystem>();
 
 		systems.Inject(this);
 	}
