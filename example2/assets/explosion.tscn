@@ -1,0 +1,37 @@
+[gd_scene format=3 uid="uid://cw5j5w5efbjp2"]
+
+[ext_resource type="Texture2D" uid="uid://yj3m5guwryy3" path="res://example2/assets/kenney_top-down-tanks-redux/PNG/Default size/explosion1.png" id="1_c0ow1"]
+[ext_resource type="Texture2D" uid="uid://qkhymr3dfpdm" path="res://example2/assets/kenney_top-down-tanks-redux/PNG/Default size/explosion2.png" id="2_cu8us"]
+[ext_resource type="Texture2D" uid="uid://cutqygkgrv2t3" path="res://example2/assets/kenney_top-down-tanks-redux/PNG/Default size/explosion3.png" id="3_xf1ol"]
+[ext_resource type="Texture2D" uid="uid://l6hh8vw8nxqt" path="res://example2/assets/kenney_top-down-tanks-redux/PNG/Default size/explosion4.png" id="4_d77vi"]
+[ext_resource type="Texture2D" uid="uid://jqd04gp074w7" path="res://example2/assets/kenney_top-down-tanks-redux/PNG/Default size/explosion5.png" id="5_0ah4x"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_es88m"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_c0ow1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_cu8us")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_xf1ol")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_d77vi")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_0ah4x")
+}],
+"loop": false,
+"name": &"default",
+"speed": 10.0
+}]
+
+[node name="Explosion" type="Node2D" unique_id=513976934]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=35701018]
+sprite_frames = SubResource("SpriteFrames_es88m")
+frame = 4
+frame_progress = 1.0

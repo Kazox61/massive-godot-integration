@@ -29,7 +29,7 @@ public class TankShootingSystem : RetroTankSystem, IUpdate {
 				bullet.Set(new Velocity2d {
 					Linear = FVector2.Normalize(tank.GunDirection) * 10.ToFP()
 				});
-				bullet.Set(new ViewAsset { PackedScenePath = "res://example2/assets/bullet.tscn"});
+				bullet.Set(new ViewAsset { PackedScenePath = $"res://example2/assets/bullet_{tank.Color}.tscn"});
 			}
 		});
 	}

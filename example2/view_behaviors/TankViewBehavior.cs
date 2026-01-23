@@ -7,7 +7,7 @@ namespace massivegodotintegration.example2;
 
 public partial class TankViewBehavior : ViewBehavior {
 	[Export] private Node2D _body;
-	[Export] private Node2D _gunAnchor;
+	[Export] private Node2D _barrelAnchor;
 	
 	private DataSet<Tank> _tanks;
 	private Entity _entity;
@@ -29,6 +29,6 @@ public partial class TankViewBehavior : ViewBehavior {
 		var tank = _tanks.Get(_entity.Id);
 		
 		_body.Rotation = FMath.Atan2(tank.MovementDirection.X, -tank.MovementDirection.Y).ToFloat();
-		_gunAnchor.Rotation = FMath.Atan2(tank.GunDirection.X, -tank.GunDirection.Y).ToFloat();
+		_barrelAnchor.Rotation = FMath.Atan2(tank.GunDirection.X, -tank.GunDirection.Y).ToFloat();
 	}
 }

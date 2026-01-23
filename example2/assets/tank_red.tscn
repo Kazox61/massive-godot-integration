@@ -1,0 +1,29 @@
+[gd_scene format=3 uid="uid://ce4q0bsow30oi"]
+
+[ext_resource type="Script" uid="uid://cxsrd1ym35r6s" path="res://addons/massive-godot-integration/synchronizer/EntityView2d.cs" id="1_vd0me"]
+[ext_resource type="Script" uid="uid://ckax01wlt33f4" path="res://example2/view_behaviors/Transform2dViewBehavior.cs" id="2_0jmrb"]
+[ext_resource type="Script" uid="uid://5gc3owqluory" path="res://example2/view_behaviors/TankViewBehavior.cs" id="3_1tu4a"]
+[ext_resource type="Texture2D" uid="uid://byopln8gywl5p" path="res://example2/assets/kenney_top-down-tanks-redux/PNG/Default size/tankBody_red_outline.png" id="4_vd0me"]
+[ext_resource type="Texture2D" uid="uid://c0fgugxwnme5j" path="res://example2/assets/kenney_top-down-tanks-redux/PNG/Default size/tankRed_barrel1_outline.png" id="5_vd0me"]
+
+[node name="Tank" type="Node2D" unique_id=638299646 node_paths=PackedStringArray("_viewBehaviors")]
+script = ExtResource("1_vd0me")
+_viewBehaviors = [NodePath("TransformViewBehavior"), NodePath("TankViewBehavior")]
+
+[node name="TransformViewBehavior" type="Node" parent="." unique_id=170372059 node_paths=PackedStringArray("_targetNode")]
+script = ExtResource("2_0jmrb")
+_targetNode = NodePath("..")
+
+[node name="TankViewBehavior" type="Node" parent="." unique_id=1741187745 node_paths=PackedStringArray("_body", "_barrelAnchor")]
+script = ExtResource("3_1tu4a")
+_body = NodePath("../Body")
+_barrelAnchor = NodePath("../BarrelAnchor")
+
+[node name="Body" type="Sprite2D" parent="." unique_id=1097951242]
+texture = ExtResource("4_vd0me")
+
+[node name="BarrelAnchor" type="Node2D" parent="." unique_id=601027937]
+
+[node name="Barrel" type="Sprite2D" parent="BarrelAnchor" unique_id=848540873]
+position = Vector2(0, -15)
+texture = ExtResource("5_vd0me")

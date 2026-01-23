@@ -8,8 +8,16 @@ public class SystemsSimulation : ISimulation {
 	public SystemsSimulation(Massive.Systems systems) {
 		Systems = systems;
 	}
+	
+	public void Initialize() {
+		Systems.Run<IInitialize>();
+	}
 
 	public void Update(int tick) {
+		if (tick == 0) {
+			Systems.Run<IFirstTick>();
+		}
+		
 		Systems.Run<IUpdate>();
 	}
 }

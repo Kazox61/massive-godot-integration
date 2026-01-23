@@ -1,0 +1,16 @@
+[gd_scene format=3 uid="uid://irt8qvry6j47"]
+
+[ext_resource type="Script" uid="uid://cxsrd1ym35r6s" path="res://addons/massive-godot-integration/synchronizer/EntityView2d.cs" id="1_ukviw"]
+[ext_resource type="Script" uid="uid://ckax01wlt33f4" path="res://example2/view_behaviors/Transform2dViewBehavior.cs" id="2_4iw7d"]
+[ext_resource type="Texture2D" uid="uid://cvbwcaqr2rj87" path="res://example2/assets/kenney_top-down-tanks-redux/PNG/Default size/bulletBlue2_outline.png" id="3_x64y4"]
+
+[node name="Bullet" type="Node2D" unique_id=1996254545 node_paths=PackedStringArray("_viewBehaviors")]
+script = ExtResource("1_ukviw")
+_viewBehaviors = [NodePath("TransformViewBehavior")]
+
+[node name="TransformViewBehavior" type="Node" parent="." unique_id=2131830726 node_paths=PackedStringArray("_targetNode")]
+script = ExtResource("2_4iw7d")
+_targetNode = NodePath("..")
+
+[node name="Body" type="Sprite2D" parent="." unique_id=1315937396]
+texture = ExtResource("3_x64y4")

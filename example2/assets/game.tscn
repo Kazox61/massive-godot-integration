@@ -6,6 +6,7 @@
 [node name="Game" type="Node2D" unique_id=335414745]
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=179235069]
+zoom = Vector2(2, 2)
 
 [node name="RetroTankRunner" type="Node" parent="." unique_id=1776045239 node_paths=PackedStringArray("MassiveStats")]
 script = ExtResource("1_rq2sc")
