@@ -31,12 +31,29 @@ public class Client2 {
 	}
 
 	public void Connect() {
-		TransportClient.Connect();
+		TransportClient?.Connect();
 	}
 
 	public void Disconnect() { }
 
 	public void Update(float clientTime) {
+		UpdateTransport(clientTime);
+
+		TargetTick = TickSync.CalculateTargetTick(clientTime);
+		Session.Loop.FastForwardToTick(TargetTick);
+
+		// only for singleplayer
+		if (TransportClient == null) {
+			ApprovedTick = TargetTick;
+			TickSync.ApproveSimulationTick(ApprovedTick);
+		}
+	}
+
+	private void UpdateTransport(float clientTime) {
+		if (TransportClient == null) {
+			return;
+		}
+		
 		if (clientTime - _lastPingTime >= 1f) {
 			_lastPingTime = clientTime;
 			var messageBytes = MessageSerializer.CreateBytes(
@@ -79,8 +96,5 @@ public class Client2 {
 				}
 			}
 		}
-
-		TargetTick = TickSync.CalculateTargetTick(clientTime);
-		Session.Loop.FastForwardToTick(TargetTick);
 	}
 }

@@ -21,11 +21,11 @@ public class InputReceiver : IInputReceiver {
 			return;
 		}
 
-		if (_client2.TransportClient.IsConnected) {
+		if (_client2.TransportClient != null && _client2.TransportClient.IsConnected) {
 			var messageBytes = _client2.MessageSerializer.CreateBytes(
 				new InputMessage {
 					Tick = tick,
-					Input = (IInput)input
+					Input = input
 				}
 			);
 			_client2.TransportClient.Socket.Send(messageBytes);

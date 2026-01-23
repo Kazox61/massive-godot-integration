@@ -7,9 +7,16 @@ using massivegodotintegration.addons.massive_godot_integration.synchronizer;
 namespace massivegodotintegration.addons.massive_godot_integration;
 
 public partial class MassiveGodotRunner<TGame, TInputCollector> : Node where TGame : IGameSetup, new() where TInputCollector : IInputCollector, new() {
+	public enum PlayMode {
+		Singleplayer,
+		Multiplayer
+	}
+	
+	[Export] public MassiveStats MassiveStats;
+	[Export] public PlayMode Mode = PlayMode.Multiplayer;
+	
 	[Export] public string IpAddress = "127.0.0.1";
 	[Export] public int Port = 1987;
-	[Export] public MassiveStats MassiveStats;
 	
 	public Client2 Client { get; private set; }
 	public GodotEntitySynchronization GodotEntitySynchronization { get; private set; }
@@ -20,8 +27,12 @@ public partial class MassiveGodotRunner<TGame, TInputCollector> : Node where TGa
 	public Session Session => Client.Session;
 
 	public override void _Ready() {
-		var endPoint = new IPEndPoint(IPAddress.Parse(IpAddress), Port);
-		var transport = new TcpTransportClient(endPoint);
+		
+		ITransportClient transport = null;
+		if (Mode == PlayMode.Multiplayer) {
+			var endPoint = new IPEndPoint(IPAddress.Parse(IpAddress), Port);
+			transport = new TcpTransportClient(endPoint);
+		}
 		Client = new Client2(transport, new SessionConfig());
 		Client.Connect();
 		
