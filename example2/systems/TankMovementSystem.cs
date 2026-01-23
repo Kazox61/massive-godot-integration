@@ -6,7 +6,7 @@ using massivegodotintegration.example.input;
 
 namespace massivegodotintegration.example2;
 
-public class TankMovementSystem : NetSystem, IUpdate {
+public class TankMovementSystem : RetroTankSystem, IUpdate {
 	public void Update() {
 		World.ForEach((ref Tank tank, ref Transform2d transform) => {
 			var playerInput = Inputs.Get<PlayerInput>(tank.InputChannel).LastActual();

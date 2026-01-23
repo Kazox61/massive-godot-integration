@@ -32,12 +32,22 @@ public class Server {
 	public void Update(double deltaTime) {
 		_transportHost.Update();
 
-		while (_transportHost.TryAccept(out var connection)) {
+		while (_transportHost.TryAccept(out var socket)) {
 			var channelId = NextChannelId;
-			var connectionAdded = _connectedSockets.TryAdd(channelId, connection);
-			if (!connectionAdded) {
-				throw new Exception("Failed to add new connection to channel connections.");
+			var socketAdded = _connectedSockets.TryAdd(channelId, socket);
+			if (!socketAdded) {
+				throw new Exception("Failed to add new socket to connected sockets.");
 			}
+			
+			var setupMessageBytes = _messageSerializer.CreateBytes(
+				new SetupClientMessage {
+					Seed = 1,
+					InputChannel = channelId
+				}
+			);
+			
+			socket.Send(setupMessageBytes);
+			GD.Print($"Client connected on channel {channelId}");
 		}
 
 		foreach (var (inputChannel, socket) in _connectedSockets) {
@@ -76,7 +86,6 @@ public class Server {
 			foreach (var (inputChannel, socket) in _connectedSockets) {
 				var messageBytes = _messageSerializer.CreateBytes(
 					new TickSyncMessage {
-						InputChannel = inputChannel,
 						ApprovedTick = _currentTick,
 						Inputs = _playedInputs
 					}

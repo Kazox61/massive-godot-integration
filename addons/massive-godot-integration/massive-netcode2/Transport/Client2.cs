@@ -1,4 +1,5 @@
-﻿using Godot;
+﻿using System;
+using Godot;
 using massivegodotintegration.example.input;
 
 namespace Massive.Netcode;
@@ -21,6 +22,9 @@ public class Client2 {
 	public readonly MessageSerializer MessageSerializer = new();
 	
 	private float _lastPingTime;
+	private bool _isInitialized;
+	
+	public event Action<uint, int> Initialized; 
 
 	public Client2(ITransportClient transportClient, SessionConfig sessionConfig) {
 		TransportClient = transportClient;
@@ -38,6 +42,10 @@ public class Client2 {
 
 	public void Update(float clientTime) {
 		UpdateTransport(clientTime);
+		
+		if (!_isInitialized) {
+			return;
+		}
 
 		TargetTick = TickSync.CalculateTargetTick(clientTime);
 		Session.Loop.FastForwardToTick(TargetTick);
@@ -70,17 +78,21 @@ public class Client2 {
 			while (TransportClient.Socket.TryReceive(out var payload)) {
 				var message = MessageSerializer.CreateMessage(payload.ToArray());
 				switch (message) {
-					case TickSyncMessage tickSyncMessage2:
-						LocalInputChannel = tickSyncMessage2.InputChannel;
-						var lastApprovedTick = tickSyncMessage2.ApprovedTick;
-						ApprovedTick = tickSyncMessage2.ApprovedTick;
+					case SetupClientMessage setupClientMessage:
+						LocalInputChannel = setupClientMessage.InputChannel;
+						_isInitialized = true;
+						Initialized?.Invoke(setupClientMessage.Seed, LocalInputChannel);
+						break;
+					case TickSyncMessage tickSyncMessage:
+						var lastApprovedTick = tickSyncMessage.ApprovedTick;
+						ApprovedTick = tickSyncMessage.ApprovedTick;
 						
 						TickSync.ApproveSimulationTick(ApprovedTick);
 
 						// Discard all prediction.
 						Session.Inputs.GetInputSet<PlayerInput>().MakeInactualInRange(lastApprovedTick, ApprovedTick);
 
-						foreach (var (tick, inputChannel, input) in tickSyncMessage2.Inputs)
+						foreach (var (tick, inputChannel, input) in tickSyncMessage.Inputs)
 						{
 							Session.Inputs.SetAt(tick, inputChannel, (PlayerInput)input);
 						}

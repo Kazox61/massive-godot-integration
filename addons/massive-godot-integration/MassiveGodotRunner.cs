@@ -39,20 +39,22 @@ public partial class MassiveGodotRunner<TGame, TInputCollector> : Node where TGa
 		GameSetup = new TGame();
 		InputCollector = new TInputCollector();
 		
-		GameSetup.SetupGame(Session.Systems, Session.World);
+		Client.Initialized += (seed, localInputChannel) => {
+			GameSetup.SetupGame(Session.Systems, Session.World, seed, localInputChannel);
 
-		Session.Systems
-			.Build(Session.World)
-			.Inject(Session);
+			Session.Systems
+				.Build(Session.World)
+				.Inject(Session);
 		
-		Session.Simulations.Add(new SystemsSimulation(Session.Systems));
+			Session.Simulations.Add(new SystemsSimulation(Session.Systems));
 		
-		Session.World.SaveFrame();
+			Session.World.SaveFrame();
 
-		GodotEntitySynchronization = new GodotEntitySynchronization(Session.World);
-		GodotEntitySynchronization.SubscribeViews();
+			GodotEntitySynchronization = new GodotEntitySynchronization(Session.World);
+			GodotEntitySynchronization.SubscribeViews();
 
-		MassiveStats?.Initialize(Session);
+			MassiveStats?.Initialize(Session);
+		};
 	}
 
 	public override void _PhysicsProcess(double delta) {
@@ -67,6 +69,6 @@ public partial class MassiveGodotRunner<TGame, TInputCollector> : Node where TGa
 		);
 
 		Client.Update(ClientTime);
-		GodotEntitySynchronization.SynchronizeViews();
+		GodotEntitySynchronization?.SynchronizeViews();
 	}
 }

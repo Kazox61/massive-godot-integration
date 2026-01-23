@@ -13,6 +13,10 @@ public partial class MassiveStats : Node {
 	}
 
 	public override void _PhysicsProcess(double delta) {
+		if (_session == null) {
+			return;
+		}
+		
 		_entityCountLabel.Text = _session.World.Entities.Count.ToString();
 	}
 }

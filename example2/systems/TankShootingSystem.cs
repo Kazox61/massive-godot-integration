@@ -7,7 +7,7 @@ using massivegodotintegration.example.input;
 
 namespace massivegodotintegration.example2;
 
-public class TankShootingSystem : NetSystem, IUpdate {
+public class TankShootingSystem : RetroTankSystem, IUpdate {
 	public void Update() {
 		World.ForEach((Entity entity, ref Tank tank) => {
 			var playerInput = Inputs.Get<PlayerInput>(tank.InputChannel).LastActual();
@@ -18,6 +18,10 @@ public class TankShootingSystem : NetSystem, IUpdate {
 			
 			if (playerInput.Attack) {
 				var bullet = World.CreateEntity();
+				bullet.Set(new Bullet {
+					OwnerId = entity.Id,
+					Lifetime = 120
+				});
 				bullet.Set(new Transform2d {
 					Position = entity.Get<Transform2d>().Position,
 					Rotation = FMath.Atan2(tank.GunDirection.X, -tank.GunDirection.Y)
