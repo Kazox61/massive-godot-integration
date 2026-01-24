@@ -27,14 +27,12 @@ public partial class MassiveGodotRunner<TGame, TInputCollector> : Node where TGa
 	public Session Session => Client.Session;
 
 	public override void _Ready() {
-		
 		ITransportClient transport = null;
 		if (Mode == PlayMode.Multiplayer) {
 			var endPoint = new IPEndPoint(IPAddress.Parse(IpAddress), Port);
 			transport = new TcpTransportClient(endPoint);
 		}
 		Client = new Client2(transport, new SessionConfig());
-		Client.Connect();
 		
 		GameSetup = new TGame();
 		InputCollector = new TInputCollector();
@@ -59,6 +57,8 @@ public partial class MassiveGodotRunner<TGame, TInputCollector> : Node where TGa
 
 			MassiveStats?.Initialize(Session);
 		};
+		
+		Client.Connect();
 	}
 
 	public override void _PhysicsProcess(double delta) {

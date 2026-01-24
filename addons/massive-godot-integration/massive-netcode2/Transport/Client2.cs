@@ -36,6 +36,11 @@ public class Client2 {
 
 	public void Connect() {
 		TransportClient?.Connect();
+
+		if (TransportClient == null) {
+			_isInitialized = true;
+			Initialized?.Invoke(1, 0);
+		}
 	}
 
 	public void Disconnect() { }
