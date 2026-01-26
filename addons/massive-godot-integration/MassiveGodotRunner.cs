@@ -41,8 +41,7 @@ public partial class MassiveGodotRunner<TGame, TInputCollector> : Node where TGa
 			GameSetup.SetupGame(Session.Systems, Session.World, seed, localInputChannel);
 
 			Session.Systems
-				.Build(Session.World)
-				.Inject(Session);
+				.Build(Session);
 
 			var systemsSimulation = new SystemsSimulation(Session.Systems);
 		

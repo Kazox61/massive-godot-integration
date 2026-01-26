@@ -1,10 +1,10 @@
 [gd_scene format=3 uid="uid://btny8ci2lm7jm"]
 
 [ext_resource type="Script" uid="uid://dx21jvd020v4k" path="res://addons/massive-godot-integration/StartScene.cs" id="1_nc8tr"]
-[ext_resource type="PackedScene" uid="uid://b7e752alkc522" path="res://example/test_server.tscn" id="2_2qtx3"]
-[ext_resource type="PackedScene" uid="uid://i8hm4ohdn3i1" path="res://example2/assets/game.tscn" id="3_nc8tr"]
+[ext_resource type="PackedScene" path="res://example/test_server.tscn" id="2_2qtx3"]
+[ext_resource type="PackedScene" uid="uid://c8qyqd44sary6" path="res://example/client_game.tscn" id="3_2qtx3"]
 
 [node name="StartScene" type="Node" unique_id=1972561724]
 script = ExtResource("1_nc8tr")
 ServerScene = ExtResource("2_2qtx3")
-ClientScene = ExtResource("3_nc8tr")
+ClientScene = ExtResource("3_2qtx3")
