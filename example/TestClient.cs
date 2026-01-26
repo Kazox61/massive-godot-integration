@@ -74,8 +74,7 @@ public partial class TestClient : Node {
 			.New<MovementSystem>()
 			.New<CameraFollowSystem>()
 			.New<PlayerAttackSystem>()
-			.Build(Session.World)
-			.Inject(Session);
+			.Build(Session);
 
 		Session.Simulations.Add(new SystemsSimulation(Session.Systems));
 		Session.Simulations.Add(TickTracker);

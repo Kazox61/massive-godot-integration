@@ -1,8 +1,8 @@
 [gd_scene format=3 uid="uid://c8qyqd44sary6"]
 
-[ext_resource type="Script" uid="uid://32ik4qhemnof" path="res://example/TestClient.cs" id="1_h706o"]
-[ext_resource type="PackedScene" uid="uid://523kihkq6fwh" path="res://addons/massive-godot-integration/massive_stats.tscn" id="2_pow3i"]
-[ext_resource type="Material" uid="uid://crh4edqr4kdta" path="res://example/assets/materials/grid_mat.tres" id="3_ih3wc"]
+[ext_resource type="Script" uid="uid://b71joadcj8hyl" path="res://example/setup/GameRunner.cs" id="1_5vu4d"]
+[ext_resource type="PackedScene" uid="uid://523kihkq6fwh" path="res://addons/massive-godot-integration/massive_stats.tscn" id="2_ivf7q"]
+[ext_resource type="Material" uid="uid://crh4edqr4kdta" path="res://example/assets/materials/grid_mat.tres" id="3_2e6nh"]
 
 [sub_resource type="Environment" id="Environment_ii4j5"]
 background_mode = 1
@@ -24,11 +24,13 @@ fog_depth_end = 20.0
 [sub_resource type="PlaneMesh" id="PlaneMesh_gvltb"]
 size = Vector2(20, 20)
 
-[node name="TestClient" type="Node3D" unique_id=1884578069 node_paths=PackedStringArray("_massiveStats")]
-script = ExtResource("1_h706o")
-_massiveStats = NodePath("MassiveStats")
+[node name="ClientGame" type="Node3D" unique_id=1884578069]
 
-[node name="MassiveStats" parent="." unique_id=1458097406 instance=ExtResource("2_pow3i")]
+[node name="GameRunner" type="Node" parent="." unique_id=698753831 node_paths=PackedStringArray("MassiveStats")]
+script = ExtResource("1_5vu4d")
+MassiveStats = NodePath("../MassiveStats")
+
+[node name="MassiveStats" parent="." unique_id=1458097406 instance=ExtResource("2_ivf7q")]
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1437914574]
 environment = SubResource("Environment_ii4j5")
@@ -45,12 +47,12 @@ visible = false
 shape = SubResource("WorldBoundaryShape3D_53iq2")
 
 [node name="GroundMesh" type="MeshInstance3D" parent="Ground" unique_id=1736104290]
-material_override = ExtResource("3_ih3wc")
+material_override = ExtResource("3_2e6nh")
 mesh = SubResource("PlaneMesh_gvltb")
 
 [node name="CSGCombiner3D" type="CSGCombiner3D" parent="." unique_id=1800448651]
 visible = false
-material_override = ExtResource("3_ih3wc")
+material_override = ExtResource("3_2e6nh")
 use_collision = true
 
 [node name="CSGBox3D" type="CSGBox3D" parent="CSGCombiner3D" unique_id=243933887]
