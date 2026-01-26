@@ -1,9 +1,10 @@
 ﻿using Massive;
 using Massive.Netcode;
-using massivegodotintegration.addons.massive_godot_integration.components;
+using Massive.Physics;
 using Fixed64;
+using massivegodotintegration.addons.massive_godot_integration;
 
-namespace massivegodotintegration.addons.massive_godot_integration.systems;
+namespace Massive.Physics;
 
 public class PhysicsGravitySystem : NetSystem, IUpdate {
 	private static readonly FVector3 Gravity = new(FP.Zero, (-9.81f).ToFP(), FP.Zero);
@@ -14,7 +15,7 @@ public class PhysicsGravitySystem : NetSystem, IUpdate {
 				return;
 			}
 
-			// body.Velocity += Gravity * (FP.One / Session.Config.TickRate.ToFP());
+			body.Velocity += Gravity * (FP.One / Session.Config.TickRate.ToFP());
 		});
 	}
 }

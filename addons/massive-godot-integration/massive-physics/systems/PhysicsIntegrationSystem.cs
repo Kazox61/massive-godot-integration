@@ -1,9 +1,10 @@
 ﻿using Massive;
 using Massive.Netcode;
-using massivegodotintegration.addons.massive_godot_integration.components;
+using Massive.Physics;
 using Fixed64;
+using massivegodotintegration.addons.massive_godot_integration;
 
-namespace massivegodotintegration.addons.massive_godot_integration.systems;
+namespace Massive.Physics;
 
 public class PhysicsIntegrationSystem : NetSystem, IUpdate {
 	public void Update() {

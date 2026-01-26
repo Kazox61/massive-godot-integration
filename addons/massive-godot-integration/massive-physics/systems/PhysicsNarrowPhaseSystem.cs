@@ -1,9 +1,11 @@
 ﻿using Massive;
 using Massive.Netcode;
-using massivegodotintegration.addons.massive_godot_integration.components;
+using Massive.Physics;
 using Fixed64;
+using Godot;
+using massivegodotintegration.addons.massive_godot_integration;
 
-namespace massivegodotintegration.addons.massive_godot_integration.systems;
+namespace Massive.Physics;
 
 public class PhysicsNarrowPhaseSystem : NetSystem, IUpdate {
 	public void Update() {
@@ -22,7 +24,7 @@ public class PhysicsNarrowPhaseSystem : NetSystem, IUpdate {
 				return;
 			}
 
-			var collision = EPA.Calculate(gjk.Simplex, colA, colB, 10000);
+			var collision = EPA.Calculate(gjk.Simplex, colA, colB);
 
 			World.Create(new Contact {
 				EntifierA = pair.A.Entifier,
