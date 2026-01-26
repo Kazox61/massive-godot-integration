@@ -1,7 +1,6 @@
 ﻿using Fixed64;
 using Godot;
 using Massive;
-using massivegodotintegration.addons.massive_godot_integration.components;
 using massivegodotintegration.addons.massive_godot_integration.synchronizer;
 
 namespace massivegodotintegration.example2;
