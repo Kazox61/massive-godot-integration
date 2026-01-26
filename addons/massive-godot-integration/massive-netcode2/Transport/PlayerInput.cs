@@ -1,7 +1,6 @@
 ﻿using System.IO;
-using Massive.Netcode;
 
-namespace massivegodotintegration.example.input;
+namespace Massive.Netcode;
 
 public struct PlayerInput : IInput {
 	public float DirectionX;

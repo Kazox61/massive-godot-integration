@@ -1,4 +1,4 @@
-﻿using massivegodotintegration.example.input;
+﻿using Massive.Netcode;
 
 namespace massivegodotintegration.addons.massive_godot_integration;
 

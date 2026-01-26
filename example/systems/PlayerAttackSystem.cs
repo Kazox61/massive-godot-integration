@@ -4,7 +4,6 @@ using massivegodotintegration.addons.massive_godot_integration;
 using Massive.Physics;
 using massivegodotintegration.addons.massive_godot_integration.synchronizer;
 using massivegodotintegration.example.components;
-using massivegodotintegration.example.input;
 using Fixed64;
 
 namespace massivegodotintegration.example.systems;

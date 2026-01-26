@@ -2,7 +2,6 @@
 using Massive;
 using Massive.Netcode;
 using massivegodotintegration.addons.massive_godot_integration;
-using massivegodotintegration.example.input;
 
 namespace massivegodotintegration.example2;
 

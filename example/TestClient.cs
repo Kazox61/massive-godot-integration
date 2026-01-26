@@ -7,7 +7,6 @@ using massivegodotintegration.addons.massive_godot_integration;
 using massivegodotintegration.addons.massive_godot_integration.synchronizer;
 using Massive.Physics;
 using massivegodotintegration.example.components;
-using massivegodotintegration.example.input;
 using massivegodotintegration.example.systems;
 using Ruffles.Channeling;
 using Ruffles.Configuration;

@@ -1,6 +1,6 @@
 ﻿using System;
 using Godot;
-using massivegodotintegration.example.input;
+using massivegodotintegration.addons.massive_godot_integration;
 
 namespace Massive.Netcode;
 
